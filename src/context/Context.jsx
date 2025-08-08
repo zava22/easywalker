@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect, useRef } from "react";
 import generateGeminiResponse from "../../src/config/gemini";
-import { highlightKeywords } from "../utils/keywordHighlighter";
 import { exportToPDF, exportToMarkdown, exportToTXT } from "../utils/exportUtils";
 
 export const Context = createContext();
@@ -30,6 +29,18 @@ const ContextProvider = (props) => {
     
     // Categories
     const [categories, setCategories] = useState([]);
+    
+    // Prompt Templates
+    const [promptTemplates, setPromptTemplates] = useState([]);
+    
+    // AI Personality
+    const [aiPersonality, setAiPersonality] = useState({
+        preset: 'friendly',
+        tone: 'casual',
+        style: 'detailed',
+        expertise: 'general',
+        customInstructions: ''
+    });
 
     const timers = useRef([]);
 
@@ -50,6 +61,22 @@ const ContextProvider = (props) => {
         const savedCategories = localStorage.getItem("categories");
         if (savedCategories) {
             setCategories(JSON.parse(savedCategories));
+        }
+    }, []);
+    
+    // Load prompt templates from localStorage
+    useEffect(() => {
+        const savedTemplates = localStorage.getItem("promptTemplates");
+        if (savedTemplates) {
+            setPromptTemplates(JSON.parse(savedTemplates));
+        }
+    }, []);
+    
+    // Load AI personality from localStorage
+    useEffect(() => {
+        const savedPersonality = localStorage.getItem("aiPersonality");
+        if (savedPersonality) {
+            setAiPersonality(JSON.parse(savedPersonality));
         }
     }, []);
 
@@ -97,6 +124,16 @@ const ContextProvider = (props) => {
             localStorage.setItem("categories", JSON.stringify(categories));
         }
     }, [categories]);
+    
+    // Save prompt templates to localStorage
+    useEffect(() => {
+        localStorage.setItem("promptTemplates", JSON.stringify(promptTemplates));
+    }, [promptTemplates]);
+    
+    // Save AI personality to localStorage
+    useEffect(() => {
+        localStorage.setItem("aiPersonality", JSON.stringify(aiPersonality));
+    }, [aiPersonality]);
 
     // Save settings to localStorage
     useEffect(() => {
@@ -259,8 +296,12 @@ const ContextProvider = (props) => {
             
             // Формируем контекст для AI
             let contextPrompt = "";
+            
+            // Add personality context
+            const personalityContext = buildPersonalityContext();
+            
             if (conversationHistory.length > 0) {
-                contextPrompt = "Previous conversation:\n";
+                contextPrompt = personalityContext + "\n\nPrevious conversation:\n";
                 conversationHistory.forEach(msg => {
                     if (msg.role === "user") {
                         contextPrompt += `User: ${msg.content}\n`;
@@ -270,7 +311,7 @@ const ContextProvider = (props) => {
                 });
                 contextPrompt += `\nCurrent question: ${query}`;
             } else {
-                contextPrompt = query;
+                contextPrompt = personalityContext + "\n\n" + query;
             }
 
             const response = await generateGeminiResponse(contextPrompt, imageData);
@@ -288,9 +329,6 @@ const ContextProvider = (props) => {
 
             newResponse = newResponse.replace(/\*(.*?)\*/g, `<span class="highlight">$1</span>`);
             let newResponse2 = newResponse.split("\n").join("<br/>");
-
-            // Apply keyword highlighting
-            newResponse2 = highlightKeywords(newResponse2);
 
             // Анимированный вывод текста
             let words = newResponse2.split(" ");
@@ -315,6 +353,20 @@ const ContextProvider = (props) => {
             setIsGenerating(false);
             setLoading(false);
         }
+    };
+    
+    const buildPersonalityContext = () => {
+        let context = "You are an AI assistant with the following personality settings:\n";
+        context += `- Tone: ${aiPersonality.tone}\n`;
+        context += `- Style: ${aiPersonality.style}\n`;
+        context += `- Expertise focus: ${aiPersonality.expertise}\n`;
+        
+        if (aiPersonality.customInstructions) {
+            context += `- Additional instructions: ${aiPersonality.customInstructions}\n`;
+        }
+        
+        context += "Please respond according to these personality settings.";
+        return context;
     };
 
     // Category management
@@ -418,6 +470,33 @@ const ContextProvider = (props) => {
         setCurrentChatId(null);
         localStorage.removeItem("chats");
     };
+    
+    // Prompt template management
+    const createPromptTemplate = (templateData) => {
+        const newTemplate = {
+            id: Date.now().toString(),
+            title: templateData.title,
+            content: templateData.content,
+            category: templateData.category,
+            createdAt: new Date().toISOString()
+        };
+        setPromptTemplates(prev => [...prev, newTemplate]);
+        return newTemplate.id;
+    };
+    
+    const updatePromptTemplate = (templateId, updates) => {
+        setPromptTemplates(prev => 
+            prev.map(template => 
+                template.id === templateId 
+                    ? { ...template, ...updates, updatedAt: new Date().toISOString() }
+                    : template
+            )
+        );
+    };
+    
+    const deletePromptTemplate = (templateId) => {
+        setPromptTemplates(prev => prev.filter(template => template.id !== templateId));
+    };
 
     const contextValue = {
         input,
@@ -460,7 +539,15 @@ const ContextProvider = (props) => {
         // Export
         exportCurrentChat,
         exportAllChats,
-        clearAllChats
+        clearAllChats,
+        // Prompt Templates
+        promptTemplates,
+        createPromptTemplate,
+        updatePromptTemplate,
+        deletePromptTemplate,
+        // AI Personality
+        aiPersonality,
+        setAiPersonality
     };
 
     return (

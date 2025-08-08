@@ -14,9 +14,11 @@ const App = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [personalityOpen, setPersonalityOpen] = useState(false);
 
   // Initialize keyboard shortcuts
-  useKeyboardShortcuts(setSettingsOpen, setSearchOpen, setCategoryOpen, setShortcutsOpen);
+  useKeyboardShortcuts(setSettingsOpen, setSearchOpen, setCategoryOpen, setShortcutsOpen, setTemplatesOpen, setPersonalityOpen);
 
   // Apply theme and settings to document
   useEffect(() => {
@@ -62,17 +64,23 @@ const App = () => {
     const handleOpenSearch = () => setSearchOpen(true);
     const handleOpenCategories = () => setCategoryOpen(true);
     const handleOpenShortcuts = () => setShortcutsOpen(true);
+    const handleOpenTemplates = () => setTemplatesOpen(true);
+    const handleOpenPersonality = () => setPersonalityOpen(true);
 
     window.addEventListener('openSettings', handleOpenSettings);
     window.addEventListener('openSearch', handleOpenSearch);
     window.addEventListener('openCategories', handleOpenCategories);
     window.addEventListener('openShortcuts', handleOpenShortcuts);
+    window.addEventListener('openTemplates', handleOpenTemplates);
+    window.addEventListener('openPersonality', handleOpenPersonality);
 
     return () => {
       window.removeEventListener('openSettings', handleOpenSettings);
       window.removeEventListener('openSearch', handleOpenSearch);
       window.removeEventListener('openCategories', handleOpenCategories);
       window.removeEventListener('openShortcuts', handleOpenShortcuts);
+      window.removeEventListener('openTemplates', handleOpenTemplates);
+      window.removeEventListener('openPersonality', handleOpenPersonality);
     };
   }, []);
 
@@ -80,6 +88,8 @@ const App = () => {
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
+        if (personalityOpen) setPersonalityOpen(false);
+        else if (templatesOpen) setTemplatesOpen(false);
         if (shortcutsOpen) setShortcutsOpen(false);
         else if (categoryOpen) setCategoryOpen(false);
         else if (searchOpen) setSearchOpen(false);
@@ -89,7 +99,7 @@ const App = () => {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [settingsOpen, searchOpen, categoryOpen, shortcutsOpen]);
+  }, [settingsOpen, searchOpen, categoryOpen, shortcutsOpen, templatesOpen, personalityOpen]);
 
   return (
     <div className="app">

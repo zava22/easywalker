@@ -5,7 +5,9 @@ export const useKeyboardShortcuts = (
   setSettingsOpen,
   setSearchOpen,
   setCategoryOpen,
-  setShortcutsOpen
+  setShortcutsOpen,
+  setTemplatesOpen,
+  setPersonalityOpen
 ) => {
   const {
     createNewChat,
@@ -73,6 +75,14 @@ export const useKeyboardShortcuts = (
             e.preventDefault();
             setCategoryOpen(true);
             break;
+          case 't':
+            e.preventDefault();
+            setTemplatesOpen(true);
+            break;
+          case 'p':
+            e.preventDefault();
+            setPersonalityOpen(true);
+            break;
         }
       }
 
@@ -100,6 +110,8 @@ export const useKeyboardShortcuts = (
     setSettingsOpen,
     setSearchOpen,
     setCategoryOpen,
-    setShortcutsOpen
+    setShortcutsOpen,
+    setTemplatesOpen,
+    setPersonalityOpen
   ]);
 };
