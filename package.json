@@ -16,7 +16,7 @@
     "jspdf": "^3.0.1",
     "lucide-react": "^0.537.0",
     "mammoth": "^1.10.0",
-    "pdfjs-dist": "^5.4.54",
+    "pdfjs-dist": "^3.11.174",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0"
