@@ -154,6 +154,7 @@ const ContextProvider = (props) => {
     };
 
     const delayPara = (index, nextWord, total, messageId) => {
+        const delay = Math.min(15 * index, 500); // Reduced delay and max cap
         const t = setTimeout(() => {
             if (!stopped) {
                 setChats(prevChats =>
@@ -175,7 +176,7 @@ const ContextProvider = (props) => {
                 setIsGenerating(false);
                 setLoading(false);
             }
-        }, 30 * index);
+        }, delay);
         timers.current.push(t);
     };
 
@@ -323,8 +324,15 @@ const ContextProvider = (props) => {
             let newResponse2 = newResponse.split("\n").join("<br/>");
 
             // Анимированный вывод текста
-            let words = newResponse2.split(" ");
-            words.forEach((word, i) => delayPara(i, word + " ", words.length, aiMessageId));
+            const words = newResponse2.split(" ");
+            const chunkSize = Math.max(1, Math.floor(words.length / 50)); // Bigger chunks for faster display
+            const chunks = [];
+            
+            for (let i = 0; i < words.length; i += chunkSize) {
+                chunks.push(words.slice(i, i + chunkSize).join(" ") + " ");
+            }
+            
+            chunks.forEach((chunk, i) => delayPara(i, chunk, chunks.length, aiMessageId));
 
         } catch (error) {
             console.error("Ошибка при запросе к AI:", error);

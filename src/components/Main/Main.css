@@ -843,9 +843,10 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
+  z-index: 1500;
   min-width: 160px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
 }
 
 [data-theme="light"] .file-upload-dropdown {
@@ -854,10 +855,14 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.file-upload-trigger:hover .file-upload-dropdown {
+.file-upload-trigger:hover .file-upload-dropdown,
+.file-upload-trigger:focus-within .file-upload-dropdown,
+.file-upload-trigger:active .file-upload-dropdown,
+.file-upload-dropdown.active {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(-4px);
+  pointer-events: auto;
 }
 
 .file-upload-option {
@@ -875,6 +880,8 @@
   background: none;
   width: 100%;
   text-align: left;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 [data-theme="light"] .file-upload-option {
@@ -1143,37 +1150,239 @@
   .nav {
     padding: 1rem;
     flex-wrap: nowrap;
-    gap: 0.25rem;
+    gap: 0.5rem;
   }
   
   .nav-left {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
+    gap: 0.5rem;
   }
   
   .logo {
-    font-size: 1rem;
+    font-size: 1.1rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 120px;
+    max-width: 140px;
   }
   
   .user-profile {
-    gap: 0.25rem;
+    gap: 0.5rem;
     flex-shrink: 0;
     min-width: 0;
   }
   
   .user-info {
+    display: flex;
+    min-width: 0;
+  }
+  
+  .user-name {
     display: none;
   }
   
   .header-actions {
-    gap: 0.125rem;
+    gap: 0.25rem;
     flex-wrap: nowrap;
     overflow: hidden;
+  }
+  
+  .header-actions .header-btn:nth-child(n+5) {
+    display: none;
+  }
+  
+  .header-btn {
+    padding: 0.5rem;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 10px;
+  }
+  
+  .header-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+  
+  .file-upload-dropdown {
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 160px;
+    z-index: 2000;
+  }
+  
+  .file-upload-trigger:hover .file-upload-dropdown {
+    transform: translateX(-50%) translateY(-4px);
+  }
+  
+  .file-upload-trigger:active .file-upload-dropdown,
+  .file-upload-trigger:focus-within .file-upload-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  
+  .file-upload-option {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .file-upload-option svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .welcome-title {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .welcome-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .suggestion-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .suggestion-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+  
+  .suggestion-card p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .chat-container {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .message {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .message-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .message-avatar svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .message-content {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .message-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .message-images {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .message-image {
+    width: 140px;
+    height: 105px;
+    border-radius: 10px;
+  }
+  
+  .input-area {
+    padding: 1rem;
+  }
+  
+  .input-wrapper {
+    padding: 1rem;
+    border-radius: 16px;
+    gap: 0.75rem;
+  }
+  
+  .message-input {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .action-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+  
+  .action-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .copy-btn {
+    padding: 0.5rem;
+    border-radius: 6px;
+  }
+  
+  .copy-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .image-preview {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .image-preview-item img {
+    width: 100px;
+    height: 75px;
+    border-radius: 8px;
+  }
+  
+  .remove-image {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    top: -8px;
+    right: -8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 0.875rem;
+    gap: 0.25rem;
+  }
+  
+  .nav-left {
+    gap: 0.375rem;
+  }
+  
+  .logo {
+    font-size: 1rem;
+    max-width: 120px;
+  }
+  
+  .header-actions {
+    gap: 0.125rem;
   }
   
   .header-actions .header-btn:nth-child(n+4) {
@@ -1195,18 +1404,11 @@
   .user-avatar {
     width: 36px;
     height: 36px;
-    flex-shrink: 0;
   }
   
   .file-upload-dropdown {
-    bottom: 120%;
-    left: 0;
-    transform: none;
     min-width: 140px;
-  }
-  
-  .file-upload-trigger:hover .file-upload-dropdown {
-    transform: translateY(-4px);
+    padding: 0.5rem;
   }
   
   .file-upload-option {
@@ -1221,93 +1423,43 @@
   
   .welcome-title {
     font-size: 1.75rem;
-    line-height: 1.2;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
   
   .welcome-subtitle {
     font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-    max-width: 100%;
-    padding: 0 1rem;
-  }
-  
-  .suggestion-cards {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding: 0 0.5rem;
+    margin-bottom: 1.25rem;
   }
   
   .suggestion-card {
     padding: 1rem;
-    border-radius: 16px;
-  }
-  
-  .suggestion-card p {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    border-radius: 14px;
   }
   
   .chat-container {
     padding: 0.5rem;
-    gap: 1rem;
-  }
-  
-  .message {
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .message-avatar {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .message-avatar svg {
-    width: 16px;
-    height: 16px;
   }
   
   .message-content {
     padding: 0.75rem;
-    border-radius: 12px;
+    border-radius: 10px;
   }
   
   .message-text {
     font-size: 0.85rem;
-    line-height: 1.5;
-  }
-  
-  .message-images {
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .message-image {
-    width: 120px;
-    height: 90px;
-    border-radius: 10px;
-  }
-  
-  .input-area {
-    padding: 0.75rem 0.75rem 1rem;
+    line-height: 1.4;
   }
   
   .input-wrapper {
-    padding: 0.75rem;
-    border-radius: 16px;
     gap: 0.5rem;
-  }
-  
-  .message-input {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    padding: 0.75rem;
+    border-radius: 14px;
   }
   
   .action-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
   }
   
   .action-btn svg {
@@ -1315,144 +1467,13 @@
     height: 18px;
   }
   
-  .copy-btn {
-    padding: 0.375rem;
-    border-radius: 6px;
-  }
-  
-  .copy-btn svg {
-    width: 12px;
-    height: 12px;
-  }
-  
-  .image-preview {
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
+  .message-input {
+    font-size: 0.9rem;
   }
   
   .image-preview-item img {
     width: 80px;
     height: 60px;
-    border-radius: 8px;
-  }
-  
-  .remove-image {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    top: -6px;
-    right: -6px;
-  }
-}
-
-@media (max-width: 480px) {
-  .nav {
-    padding: 0.75rem;
-    gap: 0.125rem;
-  }
-  
-  .nav-left {
-    gap: 0.25rem;
-  }
-  
-  .logo {
-    font-size: 0.9rem;
-    max-width: 100px;
-  }
-  
-  .header-actions {
-    gap: 0.0625rem;
-  }
-  
-  .header-actions .header-btn:nth-child(n+3) {
-    display: none;
-  }
-  
-  .header-btn {
-    padding: 0.25rem;
-    min-width: 32px;
-    min-height: 32px;
-    border-radius: 6px;
-  }
-  
-  .header-btn svg {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .user-avatar {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .file-upload-dropdown {
-    min-width: 120px;
-    padding: 0.375rem;
-  }
-  
-  .file-upload-option {
-    padding: 0.5rem;
-    font-size: 0.8rem;
-  }
-  
-  .file-upload-option svg {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .welcome-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .welcome-subtitle {
-    font-size: 0.85rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .suggestion-card {
-    padding: 0.875rem;
-    border-radius: 14px;
-  }
-  
-  .chat-container {
-    padding: 0.375rem;
-  }
-  
-  .message-content {
-    padding: 0.625rem;
-    border-radius: 10px;
-  }
-  
-  .message-text {
-    font-size: 0.8rem;
-    line-height: 1.4;
-  }
-  
-  .input-wrapper {
-    gap: 0.375rem;
-    padding: 0.5rem;
-    border-radius: 14px;
-  }
-  
-  .action-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-  }
-  
-  .action-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .message-input {
-    font-size: 0.85rem;
-  }
-  
-  .image-preview-item img {
-    width: 70px;
-    height: 52px;
   }
 }
 

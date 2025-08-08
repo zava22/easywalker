@@ -39,21 +39,35 @@ const FileUpload = ({ onFileProcessed, attachedFiles, setAttachedFiles, onClose 
   };
 
   const handleFileSelect = async (e) => {
+    e.preventDefault();
     const files = Array.from(e.target.files);
+    if (!files.length) return;
+    
     await processFiles(files);
+    // Clear the input to allow re-selecting the same file
+    e.target.value = '';
   };
 
   const processFiles = async (files) => {
+    if (!files || files.length === 0) return;
+    
     setIsProcessing(true);
     
     for (const file of files) {
       try {
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+          continue;
+        }
+        
         const processedFile = await processFile(file);
         setAttachedFiles(prev => [...prev, processedFile]);
         onFileProcessed(processedFile);
       } catch (error) {
         console.error('Error processing file:', error);
-        alert(`Error processing ${file.name}: ${error.message}`);
+        const errorMessage = error.message || 'Unknown error occurred';
+        alert(`Error processing ${file.name}: ${errorMessage}`);
       }
     }
     
@@ -114,7 +128,11 @@ const FileUpload = ({ onFileProcessed, attachedFiles, setAttachedFiles, onClose 
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          fileInputRef.current?.click();
+        }}
       >
         <input
           ref={fileInputRef}
@@ -123,6 +141,7 @@ const FileUpload = ({ onFileProcessed, attachedFiles, setAttachedFiles, onClose 
           accept=".pdf,.doc,.docx,.txt,.js,.jsx,.ts,.tsx,.py,.java,.cpp,.c,.css,.html,.json,.xml,.sql"
           onChange={handleFileSelect}
           style={{ display: 'none' }}
+          onClick={(e) => e.stopPropagation()}
         />
         
         <div className="drop-zone-content">

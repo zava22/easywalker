@@ -6,6 +6,15 @@ import mammoth from 'mammoth';
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export const processFile = async (file) => {
+  if (!file) {
+    throw new Error('No file provided');
+  }
+  
+  // Validate file size (max 10MB)
+  if (file.size > 10 * 1024 * 1024) {
+    throw new Error('File size exceeds 10MB limit');
+  }
+  
   const fileType = file.type;
   const fileName = file.name;
   const fileExtension = fileName.split('.').pop().toLowerCase();
@@ -38,64 +47,80 @@ export const processFile = async (file) => {
     }
   } catch (error) {
     console.error('Error processing file:', error);
-    throw error;
+    throw new Error(`Failed to process file: ${error.message}`);
   }
 };
 
 const processPDF = async (file) => {
-  const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  let text = '';
-  
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    const pageText = textContent.items.map(item => item.str).join(' ');
-    text += pageText + '\n';
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let text = '';
+    
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map(item => item.str).join(' ');
+      text += pageText + '\n';
+    }
+    
+    return {
+      type: 'pdf',
+      content: text,
+      fileName: file.name,
+      size: file.size
+    };
+  } catch (error) {
+    throw new Error(`Failed to process PDF: ${error.message}`);
   }
-  
-  return {
-    type: 'pdf',
-    content: text,
-    fileName: file.name,
-    size: file.size
-  };
 };
 
 const processWord = async (file) => {
-  const arrayBuffer = await file.arrayBuffer();
-  const result = await mammoth.extractRawText({ arrayBuffer });
-  
-  return {
-    type: 'document',
-    content: result.value,
-    fileName: file.name,
-    size: file.size
-  };
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    
+    return {
+      type: 'document',
+      content: result.value,
+      fileName: file.name,
+      size: file.size
+    };
+  } catch (error) {
+    throw new Error(`Failed to process Word document: ${error.message}`);
+  }
 };
 
 const processText = async (file) => {
-  const text = await file.text();
-  
-  return {
-    type: 'text',
-    content: text,
-    fileName: file.name,
-    size: file.size
-  };
+  try {
+    const text = await file.text();
+    
+    return {
+      type: 'text',
+      content: text,
+      fileName: file.name,
+      size: file.size
+    };
+  } catch (error) {
+    throw new Error(`Failed to process text file: ${error.message}`);
+  }
 };
 
 const processCode = async (file) => {
-  const text = await file.text();
-  const extension = file.name.split('.').pop().toLowerCase();
-  
-  return {
-    type: 'code',
-    language: extension,
-    content: text,
-    fileName: file.name,
-    size: file.size
-  };
+  try {
+    const text = await file.text();
+    const extension = file.name.split('.').pop().toLowerCase();
+    
+    return {
+      type: 'code',
+      language: extension,
+      content: text,
+      fileName: file.name,
+      size: file.size
+    };
+  } catch (error) {
+    throw new Error(`Failed to process code file: ${error.message}`);
+  }
 };
 
 export const formatFileSize = (bytes) => {

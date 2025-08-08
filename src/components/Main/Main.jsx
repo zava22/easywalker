@@ -37,47 +37,88 @@ const Main = () => {
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [personalityOpen, setPersonalityOpen] = useState(false);
   const [showFileUpload, setShowFileUpload] = useState(false);
+  const [fileDropdownOpen, setFileDropdownOpen] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (fileDropdownOpen && !e.target.closest('.file-upload-trigger')) {
+        setFileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [fileDropdownOpen]);
 
   const currentChat = getCurrentChat();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      const container = chatContainerRef.current;
+      // Smooth scroll to bottom
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
     }
   }, [currentChat?.messages]);
 
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
+      const textarea = textareaRef.current;
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+      const newHeight = Math.min(textarea.scrollHeight, 140); // Max height 140px
+      textareaRef.current.style.height = newHeight + 'px';
     }
   }, [input]);
 
   const handleImageUpload = (e) => {
+    e.preventDefault();
     const files = Array.from(e.target.files).slice(0, 4);
     if (!files.length) return;
 
     const previews = [...attachedImages];
     const base64List = [];
+    let processedCount = 0;
 
     files.forEach((file) => {
       if (previews.length < 4) {
-        previews.push(URL.createObjectURL(file));
+        try {
+          const preview = URL.createObjectURL(file);
+          previews.push(preview);
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          base64List.push({ base64: reader.result.split(",")[1], mime: file.type || "image/jpeg" });
-          if (base64List.length === files.length) {
-            setImageData((prev) => ([...(prev || []), ...base64List].slice(0, 4)));
-          }
-        };
-        reader.readAsDataURL(file);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            try {
+              const base64 = reader.result.split(",")[1];
+              base64List.push({ base64, mime: file.type || "image/jpeg" });
+              processedCount++;
+              
+              if (processedCount === files.length) {
+                setImageData((prev) => ([...(prev || []), ...base64List].slice(0, 4)));
+              }
+            } catch (error) {
+              console.error('Error processing image:', error);
+              processedCount++;
+            }
+          };
+          reader.onerror = () => {
+            console.error('Error reading file:', file.name);
+            processedCount++;
+          };
+          reader.readAsDataURL(file);
+        } catch (error) {
+          console.error('Error creating preview:', error);
+        }
       }
     });
 
     setAttachedImages(previews.slice(0, 4));
+    // Clear the input to allow re-selecting the same file
+    e.target.value = '';
   };
 
   const removeImage = (index) => {
@@ -308,26 +349,43 @@ const Main = () => {
               <div className="input-actions">
                 <div className="file-upload-trigger">
                   <button 
-                    className="action-btn"
+                    className={`action-btn ${fileDropdownOpen ? 'active' : ''}`}
                     title="Attach files"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setFileDropdownOpen(!fileDropdownOpen);
+                    }}
                   >
                     <Paperclip size={20} />
                   </button>
-                  <div className="file-upload-dropdown">
+                  <div className={`file-upload-dropdown ${fileDropdownOpen ? 'active' : ''}`}>
                     <button 
                       className="file-upload-option"
-                      onClick={() => setShowFileUpload(!showFileUpload)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowFileUpload(!showFileUpload);
+                        setFileDropdownOpen(false);
+                      }}
                     >
                       <FileText size={18} />
                       Documents
                     </button>
-                    <label className="file-upload-option">
+                    <label 
+                      className="file-upload-option"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFileDropdownOpen(false);
+                      }}
+                    >
                       <input
                         type="file"
                         accept="image/*"
                         multiple
                         onChange={handleImageUpload}
                         style={{ display: 'none' }}
+                        onClick={(e) => e.stopPropagation()}
                       />
                       <Image size={18} />
                       Images
