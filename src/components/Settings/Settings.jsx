@@ -57,6 +57,30 @@ const Settings = ({ isOpen, onClose }) => {
     { key: 'Esc', action: 'Stop Generation' }
   ];
 
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    // Apply theme immediately
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  const handleColorSchemeChange = (newColorScheme) => {
+    setColorScheme(newColorScheme);
+    // Apply color scheme immediately
+    document.documentElement.setAttribute('data-color-scheme', newColorScheme);
+  };
+
+  const handleFontSizeChange = (newFontSize) => {
+    setFontSize(newFontSize);
+    // Apply font size immediately
+    document.documentElement.setAttribute('data-font-size', newFontSize);
+  };
+
+  const handleAnimationsChange = (enabled) => {
+    setAnimationsEnabled(enabled);
+    // Apply animations setting immediately
+    document.documentElement.setAttribute('data-animations', enabled.toString());
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -111,7 +135,7 @@ const Settings = ({ isOpen, onClose }) => {
                       <button
                         key={id}
                         className={`theme-option ${theme === id ? 'active' : ''}`}
-                        onClick={() => setTheme(id)}
+                        onClick={() => handleThemeChange(id)}
                       >
                         <Icon size={20} />
                         {name}
@@ -127,7 +151,7 @@ const Settings = ({ isOpen, onClose }) => {
                       <button
                         key={id}
                         className={`color-scheme ${colorScheme === id ? 'active' : ''}`}
-                        onClick={() => setColorScheme(id)}
+                        onClick={() => handleColorSchemeChange(id)}
                       >
                         <div 
                           className="color-preview"
@@ -148,7 +172,7 @@ const Settings = ({ isOpen, onClose }) => {
                       <button
                         key={id}
                         className={`font-size ${fontSize === id ? 'active' : ''}`}
-                        onClick={() => setFontSize(id)}
+                        onClick={() => handleFontSizeChange(id)}
                         style={{ fontSize: size }}
                       >
                         {name}
@@ -164,7 +188,7 @@ const Settings = ({ isOpen, onClose }) => {
                       <input
                         type="checkbox"
                         checked={animationsEnabled}
-                        onChange={(e) => setAnimationsEnabled(e.target.checked)}
+                        onChange={(e) => handleAnimationsChange(e.target.checked)}
                       />
                       <span className="toggle-slider"></span>
                       Enable Animations

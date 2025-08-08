@@ -125,14 +125,45 @@ body {
 
 /* Theme variations */
 [data-theme="light"] {
-  background: linear-gradient(135deg, 
-    #f8fafc 0%,
-    #e2e8f0 25%,
-    #cbd5e1 50%,
-    #94a3b8 75%,
-    #64748b 100%
-  );
-  color: #1e293b;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: rgba(30, 41, 59, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(30, 41, 59, 0.15);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0f0f23;
+  --bg-secondary: #1a1a3e;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="auto"] {
+  --bg-primary: #0f0f23;
+  --bg-secondary: #1a1a3e;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: rgba(30, 41, 59, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(30, 41, 59, 0.15);
+  }
 }
 
 [data-theme="light"] .keyword-programming {
@@ -141,6 +172,7 @@ body {
     rgba(99, 102, 241, 0.2) 100%
   );
   color: #4c1d95;
+  border-color: rgba(139, 92, 246, 0.3);
 }
 
 [data-theme="light"] .keyword-ai {
@@ -149,6 +181,7 @@ body {
     rgba(6, 182, 212, 0.2) 100%
   );
   color: #1e40af;
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 [data-theme="light"] .keyword-web {
@@ -157,6 +190,7 @@ body {
     rgba(16, 185, 129, 0.2) 100%
   );
   color: #0f766e;
+  border-color: rgba(6, 182, 212, 0.3);
 }
 
 [data-theme="light"] .keyword-business {
@@ -165,55 +199,72 @@ body {
     rgba(239, 68, 68, 0.2) 100%
   );
   color: #92400e;
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 /* Color scheme variations */
 [data-color-scheme="blue"] {
   --primary-color: #3b82f6;
   --secondary-color: #1d4ed8;
+  --accent-color: #60a5fa;
 }
 
 [data-color-scheme="green"] {
   --primary-color: #10b981;
   --secondary-color: #059669;
+  --accent-color: #34d399;
 }
 
 [data-color-scheme="orange"] {
   --primary-color: #f59e0b;
   --secondary-color: #ea580c;
+  --accent-color: #fbbf24;
 }
 
 [data-color-scheme="pink"] {
   --primary-color: #ec4899;
   --secondary-color: #be185d;
+  --accent-color: #f472b6;
 }
 
 [data-color-scheme="red"] {
   --primary-color: #ef4444;
   --secondary-color: #dc2626;
+  --accent-color: #f87171;
+}
+
+[data-color-scheme="purple"] {
+  --primary-color: #8b5cf6;
+  --secondary-color: #7c3aed;
+  --accent-color: #a78bfa;
 }
 
 /* Font size variations */
 [data-font-size="small"] {
   font-size: 14px;
+  line-height: 1.5;
 }
 
 [data-font-size="medium"] {
   font-size: 16px;
+  line-height: 1.6;
 }
 
 [data-font-size="large"] {
   font-size: 18px;
+  line-height: 1.7;
 }
 
 [data-font-size="xl"] {
   font-size: 20px;
+  line-height: 1.8;
 }
 
 /* Disable animations when requested */
 [data-animations="false"] * {
   animation-duration: 0s !important;
   transition-duration: 0s !important;
+  transform: none !important;
 }
 
 /* Scrollbar Styles */
@@ -222,24 +273,26 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--border-color, rgba(255, 255, 255, 0.02));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, 
-    rgba(139, 92, 246, 0.4) 0%, 
-    rgba(59, 130, 246, 0.4) 100%
+    var(--primary-color, #8b5cf6) 0%, 
+    var(--secondary-color, #7c3aed) 100%
   );
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  opacity: 0.6;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, 
-    rgba(139, 92, 246, 0.6) 0%, 
-    rgba(59, 130, 246, 0.6) 100%
+    var(--primary-color, #8b5cf6) 0%, 
+    var(--secondary-color, #7c3aed) 100%
   );
+  opacity: 0.8;
 }
 
 /* Mobile Responsive */
@@ -247,25 +300,62 @@ body {
   .app {
     flex-direction: column;
   }
+  
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  * {
+    -webkit-tap-highlight-color: rgba(139, 92, 246, 0.2);
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+  body {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  
+  .app {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1600px) {
+  body {
+    font-size: 20px;
+    line-height: 1.8;
+  }
+  
+  .app {
+    max-width: 1800px;
+  }
 }
 
 /* Selection */
 ::selection {
-  background: rgba(139, 92, 246, 0.4);
-  color: white;
+  background: var(--primary-color, rgba(139, 92, 246, 0.4));
+  color: var(--text-primary, white);
 }
 
 /* Focus styles */
 button:focus,
 input:focus,
 textarea:focus {
-  outline: 2px solid rgba(139, 92, 246, 0.6);
+  outline: 2px solid var(--primary-color, rgba(139, 92, 246, 0.6));
   outline-offset: 2px;
 }
 
 /* Smooth transitions */
 * {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-animations="false"] * {
+  transition: none !important;
 }
 
 /* Custom animations */
@@ -277,7 +367,7 @@ textarea:focus {
 .shimmer {
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.1) 50%, 
+    var(--glass-bg, rgba(255, 255, 255, 0.1)) 50%, 
     transparent 100%
   );
   background-size: 200% 100%;
@@ -286,10 +376,28 @@ textarea:focus {
 
 /* Glass morphism utility */
 .glass {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg, rgba(255, 255, 255, 0.08));
   backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    inset 0 1px 0 var(--glass-border, rgba(255, 255, 255, 0.1));
+}
+
+/* Touch improvements for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .header-btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .action-btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
 }

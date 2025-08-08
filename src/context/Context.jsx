@@ -67,6 +67,23 @@ const ContextProvider = (props) => {
         }
     }, []);
 
+    // Apply theme and settings to document
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-font-size', fontSize);
+        document.documentElement.setAttribute('data-color-scheme', colorScheme);
+        document.documentElement.setAttribute('data-animations', animationsEnabled.toString());
+        
+        // Apply theme-specific styles
+        if (theme === 'light') {
+            document.body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%)';
+            document.body.style.color = '#1e293b';
+        } else {
+            document.body.style.background = 'linear-gradient(135deg, #0f0f23 0%, #1a1a3e 25%, #2d1b69 50%, #1e3a8a 75%, #0f172a 100%)';
+            document.body.style.color = 'white';
+        }
+    }, [theme, fontSize, colorScheme, animationsEnabled]);
+
     // Сохранение чатов в localStorage
     useEffect(() => {
         if (chats.length > 0 && autoSave) {

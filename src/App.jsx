@@ -24,6 +24,36 @@ const App = () => {
     document.documentElement.setAttribute('data-font-size', fontSize);
     document.documentElement.setAttribute('data-color-scheme', colorScheme);
     document.documentElement.setAttribute('data-animations', animationsEnabled.toString());
+    
+    // Apply theme-specific body styles
+    const applyThemeStyles = () => {
+      if (theme === 'light') {
+        document.body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%)';
+        document.body.style.color = '#1e293b';
+      } else if (theme === 'auto') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.body.style.background = 'linear-gradient(135deg, #0f0f23 0%, #1a1a3e 25%, #2d1b69 50%, #1e3a8a 75%, #0f172a 100%)';
+          document.body.style.color = 'white';
+        } else {
+          document.body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%)';
+          document.body.style.color = '#1e293b';
+        }
+      } else {
+        document.body.style.background = 'linear-gradient(135deg, #0f0f23 0%, #1a1a3e 25%, #2d1b69 50%, #1e3a8a 75%, #0f172a 100%)';
+        document.body.style.color = 'white';
+      }
+    };
+    
+    applyThemeStyles();
+    
+    // Listen for system theme changes when auto theme is selected
+    if (theme === 'auto') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => applyThemeStyles();
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
   }, [theme, fontSize, colorScheme, animationsEnabled]);
 
   // Listen for custom events from header buttons
