@@ -2,8 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Main.css';
 import { assets } from "../../assets/assets";
 import { Context } from '../../context/Context';
-import { Download, Search, Settings, FolderPlus, Keyboard } from 'lucide-react';
+import { Download, Search, Settings, FolderPlus, Keyboard, BookOpen, Bot } from 'lucide-react';
 import ImageModal from '../ImageModal/ImageModal';
+import FileUpload from '../FileUpload/FileUpload';
+import PromptTemplates from '../PromptTemplates/PromptTemplates';
+import AIPersonality from '../AIPersonality/AIPersonality';
 
 const Main = () => {
   const {
@@ -29,6 +32,9 @@ const Main = () => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
   const [modalInitialIndex, setModalInitialIndex] = useState(0);
+  const [attachedFiles, setAttachedFiles] = useState([]);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [personalityOpen, setPersonalityOpen] = useState(false);
 
   const currentChat = getCurrentChat();
 
@@ -105,6 +111,16 @@ const Main = () => {
     setImageModalOpen(true);
   };
 
+  const handleFileProcessed = (file) => {
+    // Add file content to input
+    const fileContent = `[File: ${file.fileName}]\n${file.content}\n\n`;
+    setInput(prev => prev + fileContent);
+  };
+
+  const handleTemplateSelect = (templateContent) => {
+    setInput(templateContent);
+  };
+
   const suggestions = [
     "Explain quantum computing in simple terms",
     "Write a creative story about time travel",
@@ -159,6 +175,20 @@ const Main = () => {
               title="Shortcuts (Ctrl+/)"
             >
               <Keyboard size={20} />
+            </button>
+            <button 
+              className="header-btn" 
+              onClick={() => setTemplatesOpen(true)}
+              title="Prompt Templates"
+            >
+              <BookOpen size={20} />
+            </button>
+            <button 
+              className="header-btn" 
+              onClick={() => setPersonalityOpen(true)}
+              title="AI Personality"
+            >
+              <Bot size={20} />
             </button>
           </div>
           <img src={assets.user_icon} alt="user" className="user-avatar" />
@@ -241,6 +271,12 @@ const Main = () => {
 
         <div className="input-area">
           <div className="input-container">
+            <FileUpload 
+              onFileProcessed={handleFileProcessed}
+              attachedFiles={attachedFiles}
+              setAttachedFiles={setAttachedFiles}
+            />
+            
             {attachedImages.length > 0 && (
               <div className="image-preview">
                 {attachedImages.map((src, idx) => (
@@ -313,6 +349,17 @@ const Main = () => {
         onClose={() => setImageModalOpen(false)}
         images={modalImages}
         initialIndex={modalInitialIndex}
+      />
+      
+      <PromptTemplates
+        isOpen={templatesOpen}
+        onClose={() => setTemplatesOpen(false)}
+        onSelectTemplate={handleTemplateSelect}
+      />
+      
+      <AIPersonality
+        isOpen={personalityOpen}
+        onClose={() => setPersonalityOpen(false)}
       />
     </div>
   );
