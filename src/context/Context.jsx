@@ -187,16 +187,6 @@ const ContextProvider = (props) => {
     };
 
     const createNewChat = () => {
-        // Проверяем, есть ли уже пустой чат
-        if (currentChatId) {
-            const currentChat = chats.find(chat => chat.id === currentChatId);
-            if (currentChat && currentChat.messages.length === 0) {
-                // Если текущий чат пустой, не создаем новый
-                setSidebarOpen(false);
-                return;
-            }
-        }
-        
         const newChatId = Date.now().toString();
         const newChat = {
             id: newChatId,
