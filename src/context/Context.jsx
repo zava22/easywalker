@@ -2,22 +2,23 @@ import React, { createContext, useState, useEffect, useRef } from "react";
 import generateGeminiResponse from "../../src/config/gemini";
 import { exportToPDF, exportToMarkdown, exportToTXT } from "../utils/exportUtils";
 
-export const Context = createContext();
+const Context = createContext();
 
 const ContextProvider = (props) => {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [stopped, setStopped] = useState(false);
-    
+
     // Система чатов
     const [chats, setChats] = useState([]);
     const [currentChatId, setCurrentChatId] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    
-    // Изображения
+
+    // Изображения и файлы
     const [attachedImages, setAttachedImages] = useState([]);
     const [imageData, setImageData] = useState([]);
+    const [attachedFiles, setAttachedFiles] = useState([]);
 
     // Settings
     const [theme, setTheme] = useState('dark');
@@ -26,13 +27,13 @@ const ContextProvider = (props) => {
     const [autoSave, setAutoSave] = useState(true);
     const [soundEnabled, setSoundEnabled] = useState(false);
     const [animationsEnabled, setAnimationsEnabled] = useState(true);
-    
+
     // Categories
     const [categories, setCategories] = useState([]);
-    
+
     // Prompt Templates
     const [promptTemplates, setPromptTemplates] = useState([]);
-    
+
     // AI Personality
     const [aiPersonality, setAiPersonality] = useState({
         preset: 'friendly',
@@ -63,7 +64,7 @@ const ContextProvider = (props) => {
             setCategories(JSON.parse(savedCategories));
         }
     }, []);
-    
+
     // Load prompt templates from localStorage
     useEffect(() => {
         const savedTemplates = localStorage.getItem("promptTemplates");
@@ -71,7 +72,7 @@ const ContextProvider = (props) => {
             setPromptTemplates(JSON.parse(savedTemplates));
         }
     }, []);
-    
+
     // Load AI personality from localStorage
     useEffect(() => {
         const savedPersonality = localStorage.getItem("aiPersonality");
@@ -100,7 +101,7 @@ const ContextProvider = (props) => {
         document.documentElement.setAttribute('data-font-size', fontSize);
         document.documentElement.setAttribute('data-color-scheme', colorScheme);
         document.documentElement.setAttribute('data-animations', animationsEnabled.toString());
-        
+
         // Apply theme-specific styles
         if (theme === 'light') {
             document.body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%)';
@@ -124,12 +125,12 @@ const ContextProvider = (props) => {
             localStorage.setItem("categories", JSON.stringify(categories));
         }
     }, [categories]);
-    
+
     // Save prompt templates to localStorage
     useEffect(() => {
         localStorage.setItem("promptTemplates", JSON.stringify(promptTemplates));
     }, [promptTemplates]);
-    
+
     // Save AI personality to localStorage
     useEffect(() => {
         localStorage.setItem("aiPersonality", JSON.stringify(aiPersonality));
@@ -155,13 +156,13 @@ const ContextProvider = (props) => {
     const delayPara = (index, nextWord, total, messageId) => {
         const t = setTimeout(() => {
             if (!stopped) {
-                setChats(prevChats => 
-                    prevChats.map(chat => 
-                        chat.id === currentChatId 
+                setChats(prevChats =>
+                    prevChats.map(chat =>
+                        chat.id === currentChatId
                             ? {
                                 ...chat,
-                                messages: chat.messages.map(msg => 
-                                    msg.id === messageId 
+                                messages: chat.messages.map(msg =>
+                                    msg.id === messageId
                                         ? { ...msg, content: msg.content + nextWord }
                                         : msg
                                 )
@@ -194,7 +195,7 @@ const ContextProvider = (props) => {
             messages: [],
             createdAt: new Date().toISOString()
         };
-        
+
         setChats(prev => [newChat, ...prev]);
         setCurrentChatId(newChatId);
         setInput("");
@@ -259,9 +260,9 @@ const ContextProvider = (props) => {
             timestamp: new Date().toISOString()
         };
 
-        setChats(prevChats => 
-            prevChats.map(chat => 
-                chat.id === chatId 
+        setChats(prevChats =>
+            prevChats.map(chat =>
+                chat.id === chatId
                     ? {
                         ...chat,
                         title: chat.messages.length === 0 ? (query.length > 30 ? query.substring(0, 30) + "..." : query) : chat.title,
@@ -284,13 +285,13 @@ const ContextProvider = (props) => {
             // Получаем контекст разговора
             const currentChat = chats.find(c => c.id === chatId);
             const conversationHistory = currentChat ? currentChat.messages : [];
-            
+
             // Формируем контекст для AI
             let contextPrompt = "";
-            
+
             // Add personality context
             const personalityContext = buildPersonalityContext();
-            
+
             if (conversationHistory.length > 0) {
                 contextPrompt = personalityContext + "\n\nPrevious conversation:\n";
                 conversationHistory.forEach(msg => {
@@ -327,13 +328,13 @@ const ContextProvider = (props) => {
 
         } catch (error) {
             console.error("Ошибка при запросе к AI:", error);
-            setChats(prevChats => 
-                prevChats.map(chat => 
-                    chat.id === chatId 
+            setChats(prevChats =>
+                prevChats.map(chat =>
+                    chat.id === chatId
                         ? {
                             ...chat,
-                            messages: chat.messages.map(msg => 
-                                msg.id === aiMessageId 
+                            messages: chat.messages.map(msg =>
+                                msg.id === aiMessageId
                                     ? { ...msg, content: "Произошла ошибка. Попробуйте снова." }
                                     : msg
                             )
@@ -345,17 +346,17 @@ const ContextProvider = (props) => {
             setLoading(false);
         }
     };
-    
+
     const buildPersonalityContext = () => {
         let context = "You are an AI assistant with the following personality settings:\n";
         context += `- Tone: ${aiPersonality.tone}\n`;
         context += `- Style: ${aiPersonality.style}\n`;
         context += `- Expertise focus: ${aiPersonality.expertise}\n`;
-        
+
         if (aiPersonality.customInstructions) {
             context += `- Additional instructions: ${aiPersonality.customInstructions}\n`;
         }
-        
+
         context += "Please respond according to these personality settings.";
         return context;
     };
@@ -373,9 +374,9 @@ const ContextProvider = (props) => {
     };
 
     const updateCategory = (categoryId, updates) => {
-        setCategories(prev => 
-            prev.map(cat => 
-                cat.id === categoryId 
+        setCategories(prev =>
+            prev.map(cat =>
+                cat.id === categoryId
                     ? { ...cat, ...updates, updatedAt: new Date().toISOString() }
                     : cat
             )
@@ -384,9 +385,9 @@ const ContextProvider = (props) => {
 
     const deleteCategory = (categoryId) => {
         // Remove category from chats
-        setChats(prev => 
-            prev.map(chat => 
-                chat.categoryId === categoryId 
+        setChats(prev =>
+            prev.map(chat =>
+                chat.categoryId === categoryId
                     ? { ...chat, categoryId: null }
                     : chat
             )
@@ -396,9 +397,9 @@ const ContextProvider = (props) => {
     };
 
     const assignChatToCategory = (chatId, categoryId) => {
-        setChats(prev => 
-            prev.map(chat => 
-                chat.id === chatId 
+        setChats(prev =>
+            prev.map(chat =>
+                chat.id === chatId
                     ? { ...chat, categoryId }
                     : chat
             )
@@ -409,10 +410,10 @@ const ContextProvider = (props) => {
     const exportCurrentChat = () => {
         const currentChat = getCurrentChat();
         if (!currentChat) return;
-        
+
         const format = prompt("Export format: pdf, markdown, or txt?", "pdf");
         if (!format) return;
-        
+
         switch (format.toLowerCase()) {
             case 'pdf':
                 exportToPDF(currentChat);
@@ -435,10 +436,10 @@ const ContextProvider = (props) => {
             alert("No chats to export.");
             return;
         }
-        
+
         const format = prompt("Export all chats as: pdf, markdown, or txt?", "markdown");
         if (!format) return;
-        
+
         chats.forEach(chat => {
             switch (format.toLowerCase()) {
                 case 'pdf':
@@ -461,7 +462,7 @@ const ContextProvider = (props) => {
         setCurrentChatId(null);
         localStorage.removeItem("chats");
     };
-    
+
     // Prompt template management
     const createPromptTemplate = (templateData) => {
         const newTemplate = {
@@ -474,17 +475,17 @@ const ContextProvider = (props) => {
         setPromptTemplates(prev => [...prev, newTemplate]);
         return newTemplate.id;
     };
-    
+
     const updatePromptTemplate = (templateId, updates) => {
-        setPromptTemplates(prev => 
-            prev.map(template => 
-                template.id === templateId 
+        setPromptTemplates(prev =>
+            prev.map(template =>
+                template.id === templateId
                     ? { ...template, ...updates, updatedAt: new Date().toISOString() }
                     : template
             )
         );
     };
-    
+
     const deletePromptTemplate = (templateId) => {
         setPromptTemplates(prev => prev.filter(template => template.id !== templateId));
     };
@@ -500,6 +501,8 @@ const ContextProvider = (props) => {
         setAttachedImages,
         imageData,
         setImageData,
+        attachedFiles,
+        setAttachedFiles,
         chats,
         currentChatId,
         getCurrentChat,
@@ -548,4 +551,5 @@ const ContextProvider = (props) => {
     );
 };
 
+export { Context };
 export default ContextProvider;
