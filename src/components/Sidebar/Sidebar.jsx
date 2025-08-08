@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import './Sidebar.css';
 import { Context } from '../../context/Context';
+import { Folder } from 'lucide-react';
 
 const Sidebar = () => {
     const {
@@ -10,13 +11,33 @@ const Sidebar = () => {
         deleteChat,
         selectChat,
         sidebarOpen,
-        setSidebarOpen
+        setSidebarOpen,
+        categories,
+        assignChatToCategory
     } = useContext(Context);
 
     const handleDeleteChat = (e, chatId) => {
         e.stopPropagation();
         deleteChat(chatId);
     };
+
+    const getCategoryById = (categoryId) => {
+        return categories.find(cat => cat.id === categoryId);
+    };
+
+    const groupChatsByCategory = () => {
+        const grouped = {
+            uncategorized: chats.filter(chat => !chat.categoryId)
+        };
+        
+        categories.forEach(category => {
+            grouped[category.id] = chats.filter(chat => chat.categoryId === category.id);
+        });
+        
+        return grouped;
+    };
+
+    const groupedChats = groupChatsByCategory();
 
     return (
         <>
@@ -39,30 +60,82 @@ const Sidebar = () => {
                 <div className="chats-section">
                     <h3 className="chats-title">Recent Chats</h3>
                     {chats.length > 0 ? (
-                        chats.map((chat) => (
-                            <div
-                                key={chat.id}
-                                className={`chat-item ${chat.id === currentChatId ? 'active' : ''}`}
-                                onClick={() => selectChat(chat.id)}
-                            >
-                                <div className="chat-content">
-                                    <div className="chat-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                                        </svg>
+                        <div className="chats-by-category">
+                            {/* Uncategorized chats */}
+                            {groupedChats.uncategorized.length > 0 && (
+                                <div className="category-group">
+                                    <div className="category-header">
+                                        <Folder size={16} />
+                                        <span>Uncategorized</span>
+                                        <span className="chat-count">({groupedChats.uncategorized.length})</span>
                                     </div>
-                                    <span className="chat-title">{chat.title}</span>
+                                    {groupedChats.uncategorized.map((chat) => (
+                                        <div
+                                            key={chat.id}
+                                            className={`chat-item ${chat.id === currentChatId ? 'active' : ''}`}
+                                            onClick={() => selectChat(chat.id)}
+                                        >
+                                            <div className="chat-content">
+                                                <div className="chat-icon">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                                    </svg>
+                                                </div>
+                                                <span className="chat-title">{chat.title}</span>
+                                            </div>
+                                            <button
+                                                className="delete-chat-btn"
+                                                onClick={(e) => handleDeleteChat(e, chat.id)}
+                                            >
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    ))}
                                 </div>
-                                <button
-                                    className="delete-chat-btn"
-                                    onClick={(e) => handleDeleteChat(e, chat.id)}
-                                >
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                    </svg>
-                                </button>
-                            </div>
-                        ))
+                            )}
+                            
+                            {/* Categorized chats */}
+                            {categories.map(category => (
+                                groupedChats[category.id] && groupedChats[category.id].length > 0 && (
+                                    <div key={category.id} className="category-group">
+                                        <div className="category-header">
+                                            <div 
+                                                className="category-color-dot"
+                                                style={{ backgroundColor: category.color }}
+                                            />
+                                            <span>{category.name}</span>
+                                            <span className="chat-count">({groupedChats[category.id].length})</span>
+                                        </div>
+                                        {groupedChats[category.id].map((chat) => (
+                                            <div
+                                                key={chat.id}
+                                                className={`chat-item ${chat.id === currentChatId ? 'active' : ''}`}
+                                                onClick={() => selectChat(chat.id)}
+                                            >
+                                                <div className="chat-content">
+                                                    <div className="chat-icon">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                                        </svg>
+                                                    </div>
+                                                    <span className="chat-title">{chat.title}</span>
+                                                </div>
+                                                <button
+                                                    className="delete-chat-btn"
+                                                    onClick={(e) => handleDeleteChat(e, chat.id)}
+                                                >
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )
+                            ))}
+                        </div>
                     ) : (
                         <div className="no-chats">No chats yet. Start a new conversation!</div>
                     )}

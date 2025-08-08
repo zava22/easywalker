@@ -112,6 +112,33 @@
   gap: 1rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-btn {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: scale(1.05);
+}
+
 .user-avatar {
   width: 44px;
   height: 44px;
@@ -401,6 +428,17 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.message-image.clickable {
+  cursor: pointer;
+}
+
+.message-image.clickable:hover {
+  transform: scale(1.05);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
 }
 
 /* Loading Animation */
@@ -706,6 +744,14 @@
   
   .logo {
     font-size: 1.5rem;
+  }
+  
+  .header-actions {
+    gap: 0.25rem;
+  }
+  
+  .header-btn {
+    padding: 0.5rem;
   }
   
   .user-avatar {

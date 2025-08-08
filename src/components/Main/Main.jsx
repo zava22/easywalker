@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Main.css';
 import { assets } from "../../assets/assets";
 import { Context } from '../../context/Context';
+import { Download, Search, Settings, FolderPlus, Keyboard } from 'lucide-react';
+import ImageModal from '../ImageModal/ImageModal';
 
 const Main = () => {
   const {
@@ -18,11 +20,15 @@ const Main = () => {
     currentChatId,
     getCurrentChat,
     createNewChat,
-    setSidebarOpen
+    setSidebarOpen,
+    exportCurrentChat
   } = useContext(Context);
 
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [modalImages, setModalImages] = useState([]);
+  const [modalInitialIndex, setModalInitialIndex] = useState(0);
 
   const currentChat = getCurrentChat();
 
@@ -88,6 +94,15 @@ const Main = () => {
   const copyToClipboard = (text) => {
     const plainText = text.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
     navigator.clipboard.writeText(plainText);
+    
+    // Show toast notification (you can implement this)
+    console.log('Copied to clipboard!');
+  };
+
+  const handleImageClick = (images, index) => {
+    setModalImages(images);
+    setModalInitialIndex(index);
+    setImageModalOpen(true);
   };
 
   const suggestions = [
@@ -107,6 +122,45 @@ const Main = () => {
           <div className="logo">EasyWalker AI</div>
         </div>
         <div className="user-profile">
+          <div className="header-actions">
+            <button 
+              className="header-btn" 
+              onClick={() => window.dispatchEvent(new CustomEvent('openSearch'))}
+              title="Search (Ctrl+K)"
+            >
+              <Search size={20} />
+            </button>
+            <button 
+              className="header-btn" 
+              onClick={() => window.dispatchEvent(new CustomEvent('openCategories'))}
+              title="Categories (Ctrl+F)"
+            >
+              <FolderPlus size={20} />
+            </button>
+            {currentChat && (
+              <button 
+                className="header-btn" 
+                onClick={exportCurrentChat}
+                title="Export Chat (Ctrl+E)"
+              >
+                <Download size={20} />
+              </button>
+            )}
+            <button 
+              className="header-btn" 
+              onClick={() => window.dispatchEvent(new CustomEvent('openSettings'))}
+              title="Settings (Ctrl+,)"
+            >
+              <Settings size={20} />
+            </button>
+            <button 
+              className="header-btn" 
+              onClick={() => window.dispatchEvent(new CustomEvent('openShortcuts'))}
+              title="Shortcuts (Ctrl+/)"
+            >
+              <Keyboard size={20} />
+            </button>
+          </div>
           <img src={assets.user_icon} alt="user" className="user-avatar" />
         </div>
       </div>
@@ -147,7 +201,13 @@ const Main = () => {
                   {message.images && message.images.length > 0 && (
                     <div className="message-images">
                       {message.images.map((src, idx) => (
-                        <img key={idx} src={src} alt={`attachment-${idx}`} className="message-image" />
+                        <img 
+                          key={idx} 
+                          src={src} 
+                          alt={`attachment-${idx}`} 
+                          className="message-image clickable" 
+                          onClick={() => handleImageClick(message.images, idx)}
+                        />
                       ))}
                     </div>
                   )}
@@ -247,6 +307,13 @@ const Main = () => {
           </div>
         </div>
       </div>
+      
+      <ImageModal
+        isOpen={imageModalOpen}
+        onClose={() => setImageModalOpen(false)}
+        images={modalImages}
+        initialIndex={modalInitialIndex}
+      />
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect, useRef } from "react";
 import generateGeminiResponse from "../../src/config/gemini";
+import { highlightKeywords } from "../utils/keywordHighlighter";
+import { exportToPDF, exportToMarkdown, exportToTXT } from "../utils/exportUtils";
 
 export const Context = createContext();
 
@@ -18,6 +20,17 @@ const ContextProvider = (props) => {
     const [attachedImages, setAttachedImages] = useState([]);
     const [imageData, setImageData] = useState([]);
 
+    // Settings
+    const [theme, setTheme] = useState('dark');
+    const [fontSize, setFontSize] = useState('medium');
+    const [colorScheme, setColorScheme] = useState('purple');
+    const [autoSave, setAutoSave] = useState(true);
+    const [soundEnabled, setSoundEnabled] = useState(false);
+    const [animationsEnabled, setAnimationsEnabled] = useState(true);
+    
+    // Categories
+    const [categories, setCategories] = useState([]);
+
     const timers = useRef([]);
 
     // Загрузка чатов из localStorage
@@ -32,12 +45,54 @@ const ContextProvider = (props) => {
         }
     }, []);
 
+    // Load categories from localStorage
+    useEffect(() => {
+        const savedCategories = localStorage.getItem("categories");
+        if (savedCategories) {
+            setCategories(JSON.parse(savedCategories));
+        }
+    }, []);
+
+    // Load settings from localStorage
+    useEffect(() => {
+        const savedSettings = localStorage.getItem("settings");
+        if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            setTheme(settings.theme || 'dark');
+            setFontSize(settings.fontSize || 'medium');
+            setColorScheme(settings.colorScheme || 'purple');
+            setAutoSave(settings.autoSave !== undefined ? settings.autoSave : true);
+            setSoundEnabled(settings.soundEnabled || false);
+            setAnimationsEnabled(settings.animationsEnabled !== undefined ? settings.animationsEnabled : true);
+        }
+    }, []);
+
     // Сохранение чатов в localStorage
     useEffect(() => {
-        if (chats.length > 0) {
+        if (chats.length > 0 && autoSave) {
             localStorage.setItem("chats", JSON.stringify(chats));
         }
-    }, [chats]);
+    }, [chats, autoSave]);
+
+    // Save categories to localStorage
+    useEffect(() => {
+        if (categories.length > 0) {
+            localStorage.setItem("categories", JSON.stringify(categories));
+        }
+    }, [categories]);
+
+    // Save settings to localStorage
+    useEffect(() => {
+        const settings = {
+            theme,
+            fontSize,
+            colorScheme,
+            autoSave,
+            soundEnabled,
+            animationsEnabled
+        };
+        localStorage.setItem("settings", JSON.stringify(settings));
+    }, [theme, fontSize, colorScheme, autoSave, soundEnabled, animationsEnabled]);
 
     const getCurrentChat = () => {
         return chats.find(chat => chat.id === currentChatId);
@@ -217,6 +272,9 @@ const ContextProvider = (props) => {
             newResponse = newResponse.replace(/\*(.*?)\*/g, `<span class="highlight">$1</span>`);
             let newResponse2 = newResponse.split("\n").join("<br/>");
 
+            // Apply keyword highlighting
+            newResponse2 = highlightKeywords(newResponse2);
+
             // Анимированный вывод текста
             let words = newResponse2.split(" ");
             words.forEach((word, i) => delayPara(i, word + " ", words.length, aiMessageId));
@@ -242,6 +300,108 @@ const ContextProvider = (props) => {
         }
     };
 
+    // Category management
+    const createCategory = (categoryData) => {
+        const newCategory = {
+            id: Date.now().toString(),
+            name: categoryData.name,
+            color: categoryData.color,
+            createdAt: new Date().toISOString()
+        };
+        setCategories(prev => [...prev, newCategory]);
+        return newCategory.id;
+    };
+
+    const updateCategory = (categoryId, updates) => {
+        setCategories(prev => 
+            prev.map(cat => 
+                cat.id === categoryId 
+                    ? { ...cat, ...updates, updatedAt: new Date().toISOString() }
+                    : cat
+            )
+        );
+    };
+
+    const deleteCategory = (categoryId) => {
+        // Remove category from chats
+        setChats(prev => 
+            prev.map(chat => 
+                chat.categoryId === categoryId 
+                    ? { ...chat, categoryId: null }
+                    : chat
+            )
+        );
+        // Remove category
+        setCategories(prev => prev.filter(cat => cat.id !== categoryId));
+    };
+
+    const assignChatToCategory = (chatId, categoryId) => {
+        setChats(prev => 
+            prev.map(chat => 
+                chat.id === chatId 
+                    ? { ...chat, categoryId }
+                    : chat
+            )
+        );
+    };
+
+    // Export functions
+    const exportCurrentChat = () => {
+        const currentChat = getCurrentChat();
+        if (!currentChat) return;
+        
+        const format = prompt("Export format: pdf, markdown, or txt?", "pdf");
+        if (!format) return;
+        
+        switch (format.toLowerCase()) {
+            case 'pdf':
+                exportToPDF(currentChat);
+                break;
+            case 'markdown':
+            case 'md':
+                exportToMarkdown(currentChat);
+                break;
+            case 'txt':
+            case 'text':
+                exportToTXT(currentChat);
+                break;
+            default:
+                alert("Invalid format. Please choose pdf, markdown, or txt.");
+        }
+    };
+
+    const exportAllChats = () => {
+        if (chats.length === 0) {
+            alert("No chats to export.");
+            return;
+        }
+        
+        const format = prompt("Export all chats as: pdf, markdown, or txt?", "markdown");
+        if (!format) return;
+        
+        chats.forEach(chat => {
+            switch (format.toLowerCase()) {
+                case 'pdf':
+                    exportToPDF(chat);
+                    break;
+                case 'markdown':
+                case 'md':
+                    exportToMarkdown(chat);
+                    break;
+                case 'txt':
+                case 'text':
+                    exportToTXT(chat);
+                    break;
+            }
+        });
+    };
+
+    const clearAllChats = () => {
+        setChats([]);
+        setCurrentChatId(null);
+        localStorage.removeItem("chats");
+    };
+
     const contextValue = {
         input,
         setInput,
@@ -260,7 +420,30 @@ const ContextProvider = (props) => {
         deleteChat,
         selectChat,
         sidebarOpen,
-        setSidebarOpen
+        setSidebarOpen,
+        // Settings
+        theme,
+        setTheme,
+        fontSize,
+        setFontSize,
+        colorScheme,
+        setColorScheme,
+        autoSave,
+        setAutoSave,
+        soundEnabled,
+        setSoundEnabled,
+        animationsEnabled,
+        setAnimationsEnabled,
+        // Categories
+        categories,
+        createCategory,
+        updateCategory,
+        deleteCategory,
+        assignChatToCategory,
+        // Export
+        exportCurrentChat,
+        exportAllChats,
+        clearAllChats
     };
 
     return (
