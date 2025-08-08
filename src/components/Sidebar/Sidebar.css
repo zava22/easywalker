@@ -1,0 +1,187 @@
+.sidebar {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f0f4f9;
+  padding: 1.5rem 1.125rem;
+  border-right: 1px solid #e0e6ed;
+  transition: all 0.3s ease;
+}
+
+/* Top section styles */
+.sidebar .top {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .menu {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar .menu:hover {
+  transform: scale(1.1);
+}
+
+/* Common button styles */
+.sidebar .new-chat,
+.sidebar .search-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #e6eaf1;
+  border-radius: 40px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  margin: 1.5rem 0;
+}
+
+.sidebar .search-btn {
+  margin: 0 0 0.625rem 0;
+}
+
+.sidebar .new-chat:hover,
+.sidebar .search-btn:hover {
+  background-color: #dbe1eb;
+}
+
+/* Search input */
+.search-input {
+  width: 100%;
+  padding: 0.5rem 0.875rem;
+  border-radius: 20px;
+  border: 1px solid #d4dbe3;
+  outline: none;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+  background-color: #fff;
+}
+
+/* Recent section */
+.recent {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.875rem;
+  max-height: 580px;
+  overflow-y: auto;
+  padding-right: 0.3125rem;
+}
+
+.recent-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #7a7a7a;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03125rem;
+  padding-left: 0.625rem;
+}
+
+.recent-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 40px;
+  color: #1f1f1f;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.recent-entry:hover {
+  background-color: #dce2ea;
+}
+
+.recent-text {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #e60000;
+}
+
+.recent-entry:hover .delete-btn {
+  opacity: 1;
+}
+
+.no-results {
+  font-size: 0.8125rem;
+  color: #888;
+  padding-left: 0.625rem;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.25rem;
+  border-top: 1px solid #d4dbe3;
+  gap: 0.625rem;
+}
+
+.bottom-item {
+  padding: 0.62rem 1rem;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.bottom-item:hover {
+  background-color: #dce2ea;
+}
+
+
+.recent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recent::-webkit-scrollbar-thumb {
+  background: #c2c8d1;
+  border-radius: 3px;
+}
+
+.recent::-webkit-scrollbar-thumb:hover {
+  background: #a0a6af;
+}
+
+/* Image styles */
+.sidebar img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
