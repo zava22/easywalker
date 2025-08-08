@@ -278,6 +278,7 @@ const ContextProvider = (props) => {
         setInput("");
         setAttachedImages([]);
         setImageData([]);
+        setAttachedFiles([]);
 
         try {
             // Получаем контекст разговора

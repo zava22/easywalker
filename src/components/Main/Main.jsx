@@ -114,9 +114,8 @@ const Main = () => {
   };
 
   const handleFileProcessed = (file) => {
-    // Add file content to input
-    const fileContent = `[File: ${file.fileName}]\n${file.content}\n\n`;
-    setInput(prev => prev + fileContent);
+    // Just add to attached files, don't modify input
+    console.log('File processed:', file.fileName);
   };
 
   const handleTemplateSelect = (templateContent) => {
@@ -348,6 +347,7 @@ const Main = () => {
                     onClick={() => {
                       if (input.trim() || attachedImages.length) {
                         if (!currentChatId) createNewChat();
+                        setAttachedFiles([]);
                         onSent();
                       }
                     }}
