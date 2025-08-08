@@ -7,6 +7,7 @@ import ImageModal from '../ImageModal/ImageModal';
 import FileUpload from '../FileUpload/FileUpload';
 import PromptTemplates from '../PromptTemplates/PromptTemplates';
 import AIPersonality from '../AIPersonality/AIPersonality';
+import { Paperclip } from 'lucide-react';
 
 const Main = () => {
   const {
@@ -35,6 +36,7 @@ const Main = () => {
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [personalityOpen, setPersonalityOpen] = useState(false);
+  const [showFileUpload, setShowFileUpload] = useState(false);
 
   const currentChat = getCurrentChat();
 
@@ -271,11 +273,14 @@ const Main = () => {
 
         <div className="input-area">
           <div className="input-container">
-            <FileUpload 
-              onFileProcessed={handleFileProcessed}
-              attachedFiles={attachedFiles}
-              setAttachedFiles={setAttachedFiles}
-            />
+            {showFileUpload && (
+              <FileUpload 
+                onFileProcessed={handleFileProcessed}
+                attachedFiles={attachedFiles}
+                setAttachedFiles={setAttachedFiles}
+                onClose={() => setShowFileUpload(false)}
+              />
+            )}
             
             {attachedImages.length > 0 && (
               <div className="image-preview">
@@ -302,6 +307,14 @@ const Main = () => {
               />
               
               <div className="input-actions">
+                <button 
+                  className={`action-btn ${showFileUpload ? 'active' : ''}`}
+                  onClick={() => setShowFileUpload(!showFileUpload)}
+                  title="Attach files"
+                >
+                  <Paperclip size={20} />
+                </button>
+                
                 <label className="action-btn">
                   <input
                     type="file"

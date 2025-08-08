@@ -244,12 +244,12 @@
 }
 
 .chats-title {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   padding-left: 0.5rem;
 }
 
@@ -273,12 +273,12 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem;
-  font-size: 0.85rem;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.375rem;
 }
 
 [data-theme="light"] .category-header {
@@ -287,8 +287,8 @@
 }
 
 .category-color-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -300,21 +300,27 @@
 
 .chat-count {
   margin-left: auto;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.125rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="light"] .chat-count {
   color: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 41, 59, 0.05);
+  border: 1px solid rgba(30, 41, 59, 0.08);
 }
 
 .chat-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
-  border-radius: 14px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -410,9 +416,9 @@
 }
 
 .chat-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   background: linear-gradient(135deg, 
     #8b5cf6 0%, 
     #3b82f6 50%,
@@ -428,14 +434,14 @@
 }
 
 .chat-icon svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: white;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 .chat-title {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
   overflow: hidden;
@@ -454,8 +460,8 @@
   border: 1px solid rgba(239, 68, 68, 0.2);
   color: rgba(239, 68, 68, 0.7);
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
+  padding: 0.375rem;
+  border-radius: 6px;
   transition: all 0.3s ease;
   opacity: 0;
   z-index: 1;
@@ -518,14 +524,15 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.875rem;
   border-radius: 12px;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
   background: rgba(255, 255, 255, 0.02);
+  font-size: 0.9rem;
 }
 
 [data-theme="light"] .bottom-item {
@@ -548,8 +555,8 @@
 }
 
 .bottom-item svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
@@ -614,14 +621,14 @@
   }
   
   .chats-title {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     margin-bottom: 0.75rem;
   }
   
   .chat-item {
-    padding: 0.875rem;
-    border-radius: 14px;
-    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
   }
   
   .chat-item:hover {
@@ -629,23 +636,23 @@
   }
   
   .chat-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
   }
   
   .chat-icon svg {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
   }
   
   .chat-title {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
   }
   
   .delete-chat-btn {
-    padding: 0.5rem;
-    border-radius: 8px;
+    padding: 0.375rem;
+    border-radius: 6px;
   }
   
   .delete-chat-btn:hover {
@@ -653,10 +660,10 @@
   }
   
   .bottom-item {
-    padding: 0.875rem;
+    padding: 0.75rem;
     border-radius: 12px;
-    margin-bottom: 0.75rem;
-    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
   }
   
   .bottom-item:hover {
@@ -664,25 +671,25 @@
   }
   
   .bottom-item svg {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
   }
   
   .category-header {
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.375rem;
   }
   
   .category-color-dot {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
   }
   
   .chat-count {
-    font-size: 0.7rem;
-    padding: 0.125rem 0.375rem;
-    border-radius: 6px;
+    font-size: 0.65rem;
+    padding: 0.1rem 0.375rem;
+    border-radius: 8px;
   }
   
   .no-chats {
@@ -710,35 +717,35 @@
   }
   
   .chat-item {
-    padding: 1.25rem;
+    padding: 1rem;
     border-radius: 16px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
   
   .chat-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
   }
   
   .chat-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
   
   .chat-title {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .bottom-item {
-    padding: 1.25rem;
+    padding: 1rem;
     border-radius: 14px;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
   
   .bottom-item svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -760,31 +767,31 @@
   }
   
   .chat-item {
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
+    padding: 1.125rem;
+    margin-bottom: 1rem;
   }
   
   .chat-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
   }
   
   .chat-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
   
   .chat-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .bottom-item {
-    padding: 1.5rem;
-    font-size: 1.1rem;
+    padding: 1.125rem;
+    font-size: 1rem;
   }
   
   .bottom-item svg {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
   }
 }

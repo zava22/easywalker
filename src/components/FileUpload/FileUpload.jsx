@@ -3,7 +3,7 @@ import { Upload, File, Code, FileText, X, AlertCircle } from 'lucide-react';
 import { processFile, formatFileSize } from '../../utils/fileProcessor';
 import './FileUpload.css';
 
-const FileUpload = ({ onFileProcessed, attachedFiles, setAttachedFiles }) => {
+const FileUpload = ({ onFileProcessed, attachedFiles, setAttachedFiles, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef(null);
@@ -78,6 +78,13 @@ const FileUpload = ({ onFileProcessed, attachedFiles, setAttachedFiles }) => {
 
   return (
     <div className="file-upload-container">
+      <div className="file-upload-header">
+        <h3>Attach Files</h3>
+        <button className="close-file-upload" onClick={onClose}>
+          <X size={16} />
+        </button>
+      </div>
+      
       {attachedFiles.length > 0 && (
         <div className="attached-files">
           {attachedFiles.map((file, index) => (

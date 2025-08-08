@@ -816,10 +816,22 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.action-btn.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #8b5cf6;
+}
+
 [data-theme="light"] .action-btn {
   background: rgba(30, 41, 59, 0.08);
   color: rgba(30, 41, 59, 0.7);
   border: 1px solid rgba(30, 41, 59, 0.1);
+}
+
+[data-theme="light"] .action-btn.active {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #8b5cf6;
 }
 
 [data-theme="light"] .action-btn:hover {
