@@ -1,66 +1,69 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import './Main.css';
 import { assets } from "../../assets/assets";
 import { Context } from '../../context/Context';
 
 const Main = () => {
   const {
-    onSent,
-    recentPrompt,
-    showResult,
-    resultData,
-    setInput,
     input,
+    setInput,
     loading,
+    onSent,
     stopGenerating,
     isGenerating,
     attachedImages,
     setAttachedImages,
     setImageData,
-    prevPrompts
+    chats,
+    currentChatId,
+    getCurrentChat,
+    createNewChat,
+    setSidebarOpen
   } = useContext(Context);
 
-  const [isVisible, setIsVisible] = useState(false);
-  const [copyMsg, setCopyMsg] = useState("");
+  const chatContainerRef = useRef(null);
+  const textareaRef = useRef(null);
 
+  const currentChat = getCurrentChat();
+
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [currentChat?.messages]);
 
-  const copyResponse = () => {
-    const plainText = resultData.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
-    navigator.clipboard.writeText(plainText).then(() => {
-      setCopyMsg("✅ Скопировано");
-      setTimeout(() => setCopyMsg(""), 2000);
-    });
-  };
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [input]);
 
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files).slice(0, 2);
+    const files = Array.from(e.target.files).slice(0, 4);
     if (!files.length) return;
 
     const previews = [...attachedImages];
     const base64List = [];
 
     files.forEach((file) => {
-      if (previews.length < 2) {
+      if (previews.length < 4) {
         previews.push(URL.createObjectURL(file));
 
         const reader = new FileReader();
         reader.onloadend = () => {
           base64List.push({ base64: reader.result.split(",")[1], mime: file.type || "image/jpeg" });
           if (base64List.length === files.length) {
-            setImageData((prev) => ([...(prev || []), ...base64List].slice(0, 2)));
+            setImageData((prev) => ([...(prev || []), ...base64List].slice(0, 4)));
           }
         };
         reader.readAsDataURL(file);
       }
     });
 
-    setAttachedImages(previews.slice(0, 2));
+    setAttachedImages(previews.slice(0, 4));
   };
 
   const removeImage = (index) => {
@@ -71,156 +74,177 @@ const Main = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (input.trim() || (attachedImages && attachedImages.length)) onSent();
+      if (input.trim() || (attachedImages && attachedImages.length)) {
+        onSent();
+      }
     }
   };
 
-  const currentChatImages = prevPrompts.length > 0 && prevPrompts[0].images ? prevPrompts[0].images : [];
+  const handleSuggestionClick = (suggestion) => {
+    setInput(suggestion);
+    onSent(suggestion);
+  };
+
+  const copyToClipboard = (text) => {
+    const plainText = text.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
+    navigator.clipboard.writeText(plainText);
+  };
+
+  const suggestions = [
+    "Explain quantum computing in simple terms",
+    "Write a creative story about time travel",
+    "Help me plan a healthy meal for the week",
+    "What are the latest trends in web development?"
+  ];
 
   return (
-    <div className='main' data-theme="light">
+    <div className='main'>
       <div className="nav">
-        <div className="logo">
-          <span className="logo-gradient">easywalker</span>
+        <div className="nav-left">
+          <button className="menu-btn" onClick={() => setSidebarOpen(true)}>
+            ☰
+          </button>
+          <div className="logo">EasyWalker AI</div>
         </div>
         <div className="user-profile">
-          <div className="user-badge">
-            <span className="user-name"></span>
-            <div className="user-status"></div>
-          </div>
           <img src={assets.user_icon} alt="user" className="user-avatar" />
         </div>
       </div>
 
-      <div className="main-container">
-        {!showResult ? (
-          <>
-            <div className={`greet ${isVisible ? 'fade-in' : ''}`}>
-              <h1><span className="gradient-text">Hello, Dev.</span></h1>
-              <p>How can I help you today?</p>
+      <div className="main-content">
+        {!currentChat || currentChat.messages.length === 0 ? (
+          <div className="welcome-screen">
+            <h1 className="welcome-title">Hello, Developer!</h1>
+            <p className="welcome-subtitle">
+              I'm your AI assistant. How can I help you today?
+            </p>
+            <div className="suggestion-cards">
+              {suggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="suggestion-card"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  <p>{suggestion}</p>
+                </div>
+              ))}
             </div>
-
-            <div className="cards">
-              <div className={`card ${isVisible ? 'slide-up' : ''}`} style={{ transitionDelay: '0.1s' }}>
-                <p>Suggest beautiful places to see on an upcoming road trip</p>
-                <div className="card-icon">
-                  <img src={assets.compass_icon} alt="compass" />
-                </div>
-              </div>
-              <div className={`card ${isVisible ? 'slide-up' : ''}`} style={{ transitionDelay: '0.2s' }}>
-                <p>Briefly summarize this concept: urban planning</p>
-                <div className="card-icon">
-                  <img src={assets.bulb_icon} alt="bulb" />
-                </div>
-              </div>
-              <div className={`card ${isVisible ? 'slide-up' : ''}`} style={{ transitionDelay: '0.3s' }}>
-                <p>Brainstorm team bonding activities for our work retreat</p>
-                <div className="card-icon">
-                  <img src={assets.message_icon} alt="message" />
-                </div>
-              </div>
-            </div>
-          </>
+          </div>
         ) : (
-          <div className="result">
-            <div className="result-title">
-              <div className="avatar-circle">
-                <img src={assets.user_icon} alt="" />
+          <div className="chat-container" ref={chatContainerRef}>
+            {currentChat.messages.map((message, index) => (
+              <div key={message.id} className={`message ${message.role}`}>
+                <div className={`message-avatar ${message.role}`}>
+                  {message.role === 'user' ? (
+                    <img src={assets.user_icon} alt="user" />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                  )}
+                </div>
+                <div className="message-content">
+                  {message.images && message.images.length > 0 && (
+                    <div className="message-images">
+                      {message.images.map((src, idx) => (
+                        <img key={idx} src={src} alt={`attachment-${idx}`} className="message-image" />
+                      ))}
+                    </div>
+                  )}
+                  {message.content ? (
+                    <>
+                      <div className="message-text" dangerouslySetInnerHTML={{ __html: message.content }} />
+                      {message.role === 'assistant' && (
+                        <button className="copy-btn" onClick={() => copyToClipboard(message.content)}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                          </svg>
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="loading-message">
+                      <span>AI is thinking</span>
+                      <div className="loading-dots">
+                        <div className="loading-dot"></div>
+                        <div className="loading-dot"></div>
+                        <div className="loading-dot"></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-              <p>{recentPrompt}</p>
-            </div>
+            ))}
+          </div>
+        )}
 
-            {currentChatImages && currentChatImages.length > 0 && (
-              <div className="chat-image-preview">
-                {currentChatImages.map((src, idx) => (
-                  <img key={idx} src={src} alt={`chat-img-${idx}`} />
+        <div className="input-area">
+          <div className="input-container">
+            {attachedImages.length > 0 && (
+              <div className="image-preview">
+                {attachedImages.map((src, idx) => (
+                  <div className="image-preview-item" key={idx}>
+                    <img src={src} alt={`preview-${idx}`} />
+                    <button className="remove-image" onClick={() => removeImage(idx)}>
+                      ×
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
 
-            <div className="result-data">
-              <div className="ai-avatar">
-                <div className="ai-icon-wrapper">
-                  <img src={assets.gemini_icon} alt="" />
-                </div>
-              </div>
-              {loading ? (
-                <div className='loader'>
-                  <div className="loading-dot"></div>
-                  <div className="loading-dot"></div>
-                  <div className="loading-dot"></div>
-                </div>
-              ) : (
-                <div className="response-content">
-                  <p dangerouslySetInnerHTML={{ __html: resultData }} />
-                  <button className="copy-btn" onClick={copyResponse}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-4 4h6a2 2 0 012 2v6a2 2 0 01-2 2h-8a2 2 0 01-2-2v-6z" />
-                    </svg>
-                    Copy
-                  </button>
-                  {copyMsg && <span className="copy-msg">{copyMsg}</span>}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="bottom">
-          {attachedImages && attachedImages.length > 0 && (
-            <div className="image-preview-box">
-              {attachedImages.map((src, idx) => (
-                <div className="image-item" key={idx}>
-                  <img src={src} alt={`preview-${idx}`} />
-                  <button className="remove-image" onClick={() => removeImage(idx)}>✖</button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className='search-box'>
-            <input
-              onChange={(e) => setInput(e.target.value)}
-              value={input}
-              placeholder='Enter a prompt here...'
-              className={input.trim() ? 'has-content' : ''}
-              onKeyDown={handleKeyDown}
-              rows={1}
-            />
-            <div className="search-icons">
-              <label className="icon-wrapper">
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  style={{ display: "none" }}
-                  onChange={handleImageUpload}
-                />
-                <img src={assets.gallery_icon} alt="gallery" />
-              </label>
-              <div className="icon-wrapper">
-                <img src={assets.mic_icon} alt="mic" />
-              </div>
-              {isGenerating ? (
-                <button className="stop-generating" onClick={stopGenerating}>
-                  <div className="stop-icon"></div>
-                </button>
-              ) : (
-                <button
-                  onClick={() => { if (input.trim() || (attachedImages && attachedImages.length)) onSent(); }}
-                  className={`send-btn ${(!input.trim() && (!attachedImages || !attachedImages.length)) ? "disabled" : ""}`}
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <div className="input-wrapper">
+              <textarea
+                ref={textareaRef}
+                className="message-input"
+                placeholder="Type your message here..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={1}
+              />
+              
+              <div className="input-actions">
+                <label className="action-btn">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                  />
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="9" cy="9" r="2" />
+                    <path d="M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                   </svg>
-                </button>
-              )}
+                </label>
+
+                {isGenerating ? (
+                  <button className="action-btn stop-btn" onClick={stopGenerating}>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="6" width="12" height="12" rx="2" />
+                    </svg>
+                  </button>
+                ) : (
+                  <button
+                    className="action-btn send-btn"
+                    onClick={() => {
+                      if (input.trim() || attachedImages.length) {
+                        if (!currentChatId) createNewChat();
+                        onSent();
+                      }
+                    }}
+                    disabled={!input.trim() && !attachedImages.length}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-          <p className="bottom-info">
-            Gemini may display inaccurate info, including about people, so double-check its responses.
-          </p>
         </div>
       </div>
     </div>

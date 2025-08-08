@@ -1,141 +1,92 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import './Sidebar.css';
-import { assets } from '../../assets/assets';
 import { Context } from '../../context/Context';
 
 const Sidebar = () => {
-    const { newChat } = useContext(Context);
-    const [extended, setExtended] = useState(false);
-    const [searchVisible, setSearchVisible] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchHistory, setSearchHistory] = useState([]);
-    const { prevPrompts,setPrevPrompts ,loadPrevPrompt } = useContext(Context);
-    const [menuOpen, setMenuOpen] = useState(null);
+    const {
+        chats,
+        currentChatId,
+        createNewChat,
+        deleteChat,
+        selectChat,
+        sidebarOpen,
+        setSidebarOpen
+    } = useContext(Context);
 
-    useEffect(() => {
-        const savedHistory = localStorage.getItem("searchHistory");
-        if (savedHistory) {
-            setSearchHistory(JSON.parse(savedHistory));
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-    }, [searchHistory]);
-
-    const handleDeleteRecent = (idx) => {
-        const updated = prevPrompts.filter((_, i) => i !== idx);
-        setPrevPrompts(updated); // обновляем в контексте сразу
-        localStorage.setItem("prevPrompts", JSON.stringify(updated));
-        setMenuOpen(null);
+    const handleDeleteChat = (e, chatId) => {
+        e.stopPropagation();
+        deleteChat(chatId);
     };
-
-    const handleSearchChange = (value) => {
-        setSearchTerm(value);
-        if (value.trim() && !searchHistory.includes(value)) {
-            setSearchHistory(prev => [...prev, value]);
-        }
-    };
-
-    const filteredPrompts = prevPrompts.filter(item =>
-        item.prompt.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     return (
-        <div className='sidebar'>
-            <div className="top">
-                <img
-                    className='menu'
-                    src={assets.menu_icon}
-                    alt="Menu"
-                    onClick={() => setExtended(prev => !prev)}
-                />
-
-                <div className="new-chat" onClick={newChat}>
-                    <img src={assets.plus_icon} alt="New Chat" />
-                    {extended && <p>New Chat</p>}
+        <>
+            <div className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`} onClick={() => setSidebarOpen(false)} />
+            <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+                <div className="sidebar-header">
+                    <h2 className="sidebar-title">EasyWalker AI</h2>
+                    <button className="close-sidebar" onClick={() => setSidebarOpen(false)}>
+                        ×
+                    </button>
                 </div>
 
-                <div
-                    className="search-btn"
-                    onClick={() => setSearchVisible(prev => !prev)}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                        className="feather feather-search">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <button className="new-chat-btn" onClick={createNewChat}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 5v14M5 12h14" />
                     </svg>
-                    {extended && <p>Search</p>}
-                </div>
+                    New Chat
+                </button>
 
-                {searchVisible && extended && (
-                    <input
-                        type="text"
-                        className="search-input"
-                        placeholder="Search recent..."
-                        value={searchTerm}
-                        onChange={(e) => handleSearchChange(e.target.value)}
-                    />
-                )}
-
-                {extended && (
-                    <div className="recent">
-                        <p className="recent-title">Recent</p>
-                        {filteredPrompts.length > 0 ? (
-                            filteredPrompts.map((item, index) => (
-                                <div
-                                    className="recent-entry"
-                                    key={index}
-                                    onMouseLeave={() => setMenuOpen(null)}
-                                >
-                                    <div
-                                        className="recent-text"
-                                        onClick={() => loadPrevPrompt(item)}
-                                    >
-                                        <img src={assets.message_icon} alt="Recent" />
-                                        <p>
-                                            {item.prompt.length > 25
-                                                ? item.prompt.slice(0, 25) + "..."
-                                                : item.prompt}
-                                        </p>
+                <div className="chats-section">
+                    <h3 className="chats-title">Recent Chats</h3>
+                    {chats.length > 0 ? (
+                        chats.map((chat) => (
+                            <div
+                                key={chat.id}
+                                className={`chat-item ${chat.id === currentChatId ? 'active' : ''}`}
+                                onClick={() => selectChat(chat.id)}
+                            >
+                                <div className="chat-content">
+                                    <div className="chat-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                        </svg>
                                     </div>
-
-                                    <button
-                                        className="delete-btn"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeleteRecent(index);
-                                        }}
-                                    >
-                                        ✕
-                                    </button>
+                                    <span className="chat-title">{chat.title}</span>
                                 </div>
-                            ))
-                        ) : (
-                            <p className="no-results">No results found</p>
-                        )}
+                                <button
+                                    className="delete-chat-btn"
+                                    onClick={(e) => handleDeleteChat(e, chat.id)}
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="no-chats">No chats yet. Start a new conversation!</div>
+                    )}
+                </div>
 
+                <div className="sidebar-bottom">
+                    <div className="bottom-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                        Settings
                     </div>
-                )}
-            </div>
-
-            <div className="bottom">
-                <div className="bottom-item recent-entry">
-                    <img src={assets.question_icon} alt="Help" />
-                    {extended && <p>Help</p>}
-                </div>
-                <div className="bottom-item recent-entry">
-                    <img src={assets.history_icon} alt="Activity" />
-                    {extended && <p>Activity</p>}
-                </div>
-                <div className="bottom-item recent-entry">
-                    <img src={assets.setting_icon} alt="Settings" />
-                    {extended && <p>Settings</p>}
+                    <div className="bottom-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                        Help & FAQ
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
