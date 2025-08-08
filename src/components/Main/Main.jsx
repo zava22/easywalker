@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Main.css';
 import { assets } from "../../assets/assets";
 import { Context } from '../../context/Context';
-import { Download, Search, Settings, FolderPlus, Keyboard, BookOpen, Bot } from 'lucide-react';
+import { Download, Search, Settings, FolderPlus, Keyboard, BookOpen, Bot, FileText, Image } from 'lucide-react';
 import ImageModal from '../ImageModal/ImageModal';
 import FileUpload from '../FileUpload/FileUpload';
 import PromptTemplates from '../PromptTemplates/PromptTemplates';
