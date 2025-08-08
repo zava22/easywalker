@@ -307,8 +307,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 500px;
-  width: 80%;
+  max-width: 420px;
+  width: 90%;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -319,7 +319,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .welcome-glow {
@@ -327,8 +327,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   background: radial-gradient(circle, 
     rgba(139, 92, 246, 0.3) 0%, 
     rgba(59, 130, 246, 0.2) 30%,
@@ -362,8 +362,8 @@
 }
 
 .welcome-icon {
-  width: 140px;
-  height: 140px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: linear-gradient(135deg, 
     #8b5cf6 0%, 
@@ -409,14 +409,14 @@
 }
 
 .welcome-icon svg {
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   color: white;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
 }
 
 .first-visit-title {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 900;
   background: linear-gradient(135deg, 
     #ffffff 0%,
@@ -429,10 +429,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   text-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
   line-height: 1.1;
-  letter-spacing: -3px;
+  letter-spacing: -2px;
   position: relative;
 }
 
@@ -442,7 +442,7 @@
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
+  width: 80px;
   height: 4px;
   background: linear-gradient(90deg, 
     transparent 0%,
@@ -475,13 +475,14 @@
 }
 
 .first-visit-subtitle {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
   line-height: 1.6;
   font-weight: 400;
-  max-width: 600px;
+  max-width: 400px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
 [data-theme="light"] .first-visit-subtitle {
@@ -494,7 +495,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 1.75rem 3rem;
+  padding: 1.25rem 2.25rem;
   background: linear-gradient(135deg, 
     #8b5cf6 0%, 
     #3b82f6 30%,
@@ -502,10 +503,10 @@
     #10b981 100%
   );
   border: none;
-  border-radius: 25px;
+  border-radius: 20px;
   color: white;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
@@ -551,8 +552,8 @@
 }
 
 .create-first-chat-btn svg {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
 }
 
@@ -568,7 +569,7 @@
 }
 
 .welcome-title {
-  font-size: 3rem;
+  font-size: 2.25rem;
   font-weight: 900;
   background: linear-gradient(135deg, 
     #ffffff 0%,
@@ -581,10 +582,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
   line-height: 1.1;
-  letter-spacing: -2.5px;
+  letter-spacing: -2px;
 }
 
 [data-theme="light"] .welcome-title {
@@ -602,13 +603,14 @@
 }
 
 .welcome-subtitle {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   max-width: 90%;
   text-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   line-height: 1.6;
   font-weight: 400;
+  text-align: center;
 }
 
 [data-theme="light"] .welcome-subtitle {
@@ -631,8 +633,8 @@
 
 .suggestion-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
   max-width: 100%;
   width: 100%;
 }
@@ -641,8 +643,8 @@
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(25px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 2.5rem;
+  border-radius: 20px;
+  padding: 1.75rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -708,7 +710,7 @@
 
 .suggestion-card p {
   color: rgba(255, 255, 255, 0.95);
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
   position: relative;
@@ -1112,8 +1114,17 @@
   width: 100%;
 }
 
+.message-input:disabled {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
 [data-theme="light"] .message-input {
   color: rgba(30, 41, 59, 0.95);
+}
+
+[data-theme="light"] .message-input:disabled {
+  color: rgba(30, 41, 59, 0.4);
 }
 
 .message-input::placeholder {
@@ -1230,6 +1241,15 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.action-btn:disabled {
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
 .action-btn.active {
   background: rgba(139, 92, 246, 0.2);
   border-color: rgba(139, 92, 246, 0.4);
@@ -1240,6 +1260,12 @@
   background: rgba(30, 41, 59, 0.08);
   color: rgba(30, 41, 59, 0.7);
   border: 1px solid rgba(30, 41, 59, 0.1);
+}
+
+[data-theme="light"] .action-btn:disabled {
+  background: rgba(30, 41, 59, 0.03);
+  color: rgba(30, 41, 59, 0.3);
+  border-color: rgba(30, 41, 59, 0.05);
 }
 
 [data-theme="light"] .action-btn.active {
@@ -1259,6 +1285,20 @@
   border-color: rgba(255, 255, 255, 0.2);
   color: white;
   transform: scale(1.08);
+}
+
+.action-btn:disabled:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.3);
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .action-btn:disabled:hover {
+  background: rgba(30, 41, 59, 0.03);
+  color: rgba(30, 41, 59, 0.3);
+  transform: none;
+  border-color: rgba(30, 41, 59, 0.05);
 }
 
 .action-btn input {
@@ -1459,51 +1499,51 @@
   }
   
   .first-visit-welcome {
-    padding: 1rem;
+    padding: 0.75rem;
     max-width: 100%;
   }
   
   .welcome-hero {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
   
   .welcome-glow {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
   }
   
   .welcome-icon {
-    width: 110px;
-    height: 110px;
+    width: 80px;
+    height: 80px;
   }
   
   .welcome-icon svg {
-    width: 55px;
-    height: 55px;
+    width: 40px;
+    height: 40px;
   }
   
   .first-visit-title {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
     line-height: 1.2;
-    letter-spacing: -2px;
+    letter-spacing: -1.5px;
   }
   
   .first-visit-subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
     padding: 0 1rem;
   }
   
   .create-first-chat-btn {
-    padding: 1.5rem 2.5rem;
-    font-size: 1.1rem;
-    border-radius: 20px;
+    padding: 1rem 1.75rem;
+    font-size: 0.9rem;
+    border-radius: 16px;
   }
   
   .create-first-chat-btn svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
   
   .nav {
@@ -1600,32 +1640,32 @@
   }
   
   .welcome-title {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     line-height: 1.2;
-    margin-bottom: 1.5rem;
-    letter-spacing: -2px;
+    margin-bottom: 1rem;
+    letter-spacing: -1.5px;
   }
   
   .welcome-subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
     max-width: 100%;
     padding: 0 1rem;
   }
   
   .suggestion-cards {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
     padding: 0 0.5rem;
   }
   
   .suggestion-card {
-    padding: 2rem;
-    border-radius: 20px;
+    padding: 1.25rem;
+    border-radius: 16px;
   }
   
   .suggestion-card p {
-    font-size: 1.05rem;
+    font-size: 0.85rem;
     line-height: 1.5;
   }
   
@@ -1736,44 +1776,44 @@
   }
   
   .welcome-hero {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
   }
   
   .welcome-glow {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
   }
   
   .welcome-icon {
-    width: 90px;
-    height: 90px;
+    width: 70px;
+    height: 70px;
   }
   
   .welcome-icon svg {
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
   }
   
   .first-visit-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    letter-spacing: -1.5px;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -1px;
   }
   
   .first-visit-subtitle {
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
   }
   
   .create-first-chat-btn {
-    padding: 1.25rem 2rem;
-    font-size: 1rem;
-    border-radius: 18px;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.85rem;
+    border-radius: 14px;
   }
   
   .create-first-chat-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
   
   .nav {
@@ -1831,23 +1871,23 @@
   }
   
   .welcome-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    letter-spacing: -1.5px;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -1px;
   }
   
   .welcome-subtitle {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
   }
   
   .suggestion-card {
-    padding: 1.5rem;
-    border-radius: 18px;
+    padding: 1rem;
+    border-radius: 14px;
   }
   
   .suggestion-card p {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
   
   .chat-container {

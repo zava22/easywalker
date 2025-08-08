@@ -373,11 +373,12 @@ const Main = () => {
               <textarea
                 ref={textareaRef}
                 className="message-input"
-                placeholder="Type your message here..."
+                placeholder={currentChatId ? "Type your message here..." : "Create a new chat to start messaging..."}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 rows={1}
+                disabled={!currentChatId}
               />
               
               <div className="input-actions">
@@ -385,10 +386,13 @@ const Main = () => {
                   <button 
                     className={`action-btn ${fileDropdownOpen ? 'active' : ''}`}
                     title="Attach files"
+                    disabled={!currentChatId}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      setFileDropdownOpen(!fileDropdownOpen);
+                      if (currentChatId) {
+                        setFileDropdownOpen(!fileDropdownOpen);
+                      }
                     }}
                   >
                     <Paperclip size={20} />
@@ -399,7 +403,9 @@ const Main = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setShowFileUpload(!showFileUpload);
+                        if (currentChatId) {
+                          setShowFileUpload(!showFileUpload);
+                        }
                         setFileDropdownOpen(false);
                       }}
                     >
@@ -420,6 +426,7 @@ const Main = () => {
                         onChange={handleImageUpload}
                         style={{ display: 'none' }}
                         onClick={(e) => e.stopPropagation()}
+                        disabled={!currentChatId}
                       />
                       <Image size={18} />
                       Images
@@ -437,13 +444,13 @@ const Main = () => {
                   <button
                     className="action-btn send-btn"
                     onClick={() => {
-                      if (input.trim() || attachedImages.length) {
+                      if ((input.trim() || attachedImages.length) && currentChatId) {
                         if (!currentChatId) createNewChat();
                         setAttachedFiles([]);
                         onSent();
                       }
                     }}
-                    disabled={!input.trim() && !attachedImages.length}
+                    disabled={(!input.trim() && !attachedImages.length) || !currentChatId}
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
