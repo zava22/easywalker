@@ -558,7 +558,8 @@
   .sidebar {
     position: relative;
     transform: translateX(0);
-    width: 320px;
+    width: 280px;
+    flex-shrink: 0;
   }
   
   .sidebar-overlay {
@@ -718,7 +719,7 @@
 /* Large screen improvements */
 @media (min-width: 1200px) {
   .sidebar {
-    width: 360px;
+    width: 320px;
     padding: 2rem;
   }
   
@@ -763,5 +764,52 @@
   .bottom-item svg {
     width: 24px;
     height: 24px;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1600px) {
+  .sidebar {
+    width: 360px;
+    padding: 2.5rem;
+  }
+  
+  .sidebar-title {
+    font-size: 2rem;
+  }
+  
+  .new-chat-btn {
+    padding: 1.5rem 1.75rem;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+  }
+  
+  .chat-item {
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .chat-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .chat-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .chat-title {
+    font-size: 1.1rem;
+  }
+  
+  .bottom-item {
+    padding: 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .bottom-item svg {
+    width: 26px;
+    height: 26px;
   }
 }
