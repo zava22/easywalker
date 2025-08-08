@@ -434,31 +434,27 @@
 
 @media (max-width: 768px) {
   .settings-modal {
-    width: 95%;
-    height: 90vh;
-    border-radius: 20px;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    max-height: none;
   }
   
   .settings-header {
-    padding: 1.5rem;
+    padding: 1rem;
   }
   
   .settings-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
   
   .close-settings {
-    padding: 1rem;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    border-radius: 12px;
   }
   
   .close-settings:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.08);
+    transform: scale(1.05);
   }
   
   .settings-content {
@@ -471,221 +467,169 @@
     overflow-x: auto;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 1rem 1.5rem;
-    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
   }
   
   .tab {
     white-space: nowrap;
     border-left: none;
     border-bottom: 3px solid transparent;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 0.9rem;
-    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
     flex-shrink: 0;
   }
   
   .tab.active {
     border-left: none;
     border-bottom: 3px solid #8b5cf6;
-    background: rgba(139, 92, 246, 0.15);
-    border-color: rgba(139, 92, 246, 0.25);
   }
   
   .tab:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
   }
   
   .settings-panel {
-    padding: 2rem 1.5rem;
+    padding: 1.25rem 1rem;
   }
   
   .color-schemes {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 0.75rem;
   }
   
   .color-scheme {
-    padding: 1.25rem;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 1rem;
+    border-radius: 12px;
   }
   
   .color-scheme:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+    transform: translateY(-2px);
   }
   
   .color-scheme.active {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: rgba(139, 92, 246, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
+    transform: translateY(-2px);
   }
   
   .color-preview {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
   }
   
   .theme-options {
     flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: 0.75rem;
   }
   
   .theme-option {
-    padding: 1.25rem;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    min-width: 120px;
-    font-size: 0.95rem;
-    font-weight: 600;
+    padding: 1rem;
+    border-radius: 12px;
+    min-width: 100px;
+    font-size: 0.85rem;
   }
   
   .theme-option:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+    transform: translateY(-2px);
   }
   
   .theme-option.active {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: rgba(139, 92, 246, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
+    transform: translateY(-2px);
   }
   
   .font-sizes {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
   }
   
   .font-size {
-    padding: 1.25rem 1.5rem;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    font-weight: 600;
+    padding: 1rem;
+    border-radius: 12px;
     text-align: left;
   }
   
   .font-size:hover {
-    background: rgba(255, 255, 255, 0.12);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
   }
   
   .font-size.active {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: rgba(139, 92, 246, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);
   }
   
   .toggle-options {
-    gap: 1.5rem;
+    gap: 1rem;
   }
   
   .toggle-option {
-    padding: 1rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 0.875rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
   }
   
   .toggle-slider {
-    width: 60px;
-    height: 32px;
-    border-radius: 16px;
+    width: 50px;
+    height: 26px;
+    border-radius: 13px;
   }
   
   .toggle-slider::before {
-    width: 26px;
-    height: 26px;
-    top: 3px;
-    left: 3px;
+    width: 20px;
+    height: 20px;
+    top: 2px;
+    left: 2px;
   }
   
   .toggle-option input:checked + .toggle-slider::before {
-    transform: translateX(28px);
+    transform: translateX(24px);
   }
   
   .export-btn {
-    padding: 1.25rem 1.5rem;
-    border-radius: 14px;
-    font-size: 1rem;
-    font-weight: 700;
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
   }
   
   .export-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.45);
+    transform: translateY(-2px);
   }
   
   .danger-btn {
-    padding: 1.25rem 1.5rem;
-    border-radius: 14px;
-    font-size: 1rem;
-    font-weight: 700;
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.35);
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
   }
   
   .danger-btn:hover {
-    background: rgba(239, 68, 68, 0.25);
-    border-color: rgba(239, 68, 68, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
+    transform: translateY(-2px);
   }
   
   .shortcut-item {
-    padding: 1.25rem;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 1rem;
+    border-radius: 12px;
   }
   
   .shortcut-key {
-    padding: 0.75rem 1rem;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    font-size: 0.9rem;
-    font-weight: 700;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
   }
   
   .shortcut-action {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 0.85rem;
   }
   
   .about-info {
-    padding: 2rem;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 1.25rem;
+    border-radius: 12px;
   }
   
   .about-info p {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
   }
   
   .about-info p:first-child {
-    font-size: 1.25rem;
-    font-weight: 800;
+    font-size: 1.1rem;
   }
 }
 

@@ -278,32 +278,71 @@
 
 @media (max-width: 768px) {
   .search-overlay {
-    padding-top: 5vh;
+    padding-top: 2vh;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   
   .search-modal {
-    width: 95%;
-    max-height: 80vh;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 16px;
   }
   
   .search-header {
-    padding: 1rem;
+    padding: 0.875rem;
   }
   
   .search-input-wrapper {
-    padding: 0.875rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+  
+  .search-input {
+    font-size: 0.9rem;
   }
   
   .search-results {
-    padding: 0.75rem;
+    padding: 0.5rem;
   }
   
   .search-result {
-    padding: 0.875rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
   }
   
   .result-icon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+  
+  .result-title {
+    font-size: 0.9rem;
+  }
+  
+  .result-preview {
+    font-size: 0.8rem;
+  }
+  
+  .result-date {
+    font-size: 0.75rem;
+  }
+  
+  .no-results {
+    padding: 2rem 1rem;
+  }
+  
+  .search-tips {
+    padding: 1.25rem;
+  }
+  
+  .search-tips h3 {
+    font-size: 1rem;
+  }
+  
+  .search-tips li {
+    font-size: 0.85rem;
   }
 }
