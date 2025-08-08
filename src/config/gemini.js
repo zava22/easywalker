@@ -1,4 +1,5 @@
-const apiKey = "AIzaSyBwltHavql4IeU8Ls-4-FKyq7EwA6Da3dg"; // твой ключ
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
 
 const generateGeminiResponse = async (prompt, images = []) => {
   console.log("Sending prompt to Gemini:", prompt);
