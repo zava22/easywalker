@@ -8,6 +8,8 @@
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 [data-theme="light"] .file-upload-container {
@@ -70,6 +72,7 @@
   gap: 0.5rem;
   max-height: 200px;
   overflow-y: auto;
+  max-width: 100%;
 }
 
 .attached-file {
@@ -82,6 +85,9 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   transition: all 0.3s ease;
+  min-height: 60px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 [data-theme="light"] .attached-file {
@@ -104,6 +110,8 @@
   align-items: center;
   gap: 0.75rem;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .file-icon {
@@ -122,12 +130,17 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
 }
 
 .file-name {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 [data-theme="light"] .file-name {
@@ -137,6 +150,7 @@
 .file-size {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
 }
 
 [data-theme="light"] .file-size {
@@ -154,6 +168,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  min-width: 36px;
+  min-height: 36px;
 }
 
 .remove-file:hover {
@@ -245,6 +262,7 @@
   
   .attached-file {
     padding: 0.5rem;
+    min-height: 56px;
   }
   
   .file-icon {
@@ -258,5 +276,30 @@
   
   .file-size {
     font-size: 0.75rem;
+  }
+  
+  .remove-file {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0.375rem;
+  }
+  
+  .file-upload-container {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .file-upload-header {
+    margin-bottom: 0.375rem;
+  }
+  
+  .file-upload-header h3 {
+    font-size: 0.85rem;
+  }
+  
+  .close-file-upload {
+    padding: 0.375rem;
+    min-width: 32px;
+    min-height: 32px;
   }
 }
