@@ -15,6 +15,7 @@
   flex-direction: column;
   width: 100%;
   min-width: 0;
+  max-width: 100%;
 }
 
 /* Light theme styles */
@@ -73,6 +74,9 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
   width: 100%;
+  min-height: 70px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 [data-theme="light"] .nav {
@@ -111,6 +115,9 @@
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .menu-btn {
@@ -124,6 +131,7 @@
   padding: 0.75rem;
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
 }
 
 [data-theme="light"] .menu-btn {
@@ -158,12 +166,18 @@
   background-clip: text;
   text-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
   letter-spacing: -1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .user-profile {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .header-actions {
@@ -172,6 +186,7 @@
   gap: 0.25rem;
   flex-wrap: nowrap;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .header-btn {
@@ -226,6 +241,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
+  display: block;
 }
 
 [data-theme="light"] .user-name {
@@ -277,6 +293,7 @@
   width: 100%;
   box-sizing: border-box;
   position: relative;
+  min-height: 0;
 }
 
 .welcome-screen::before {
@@ -312,6 +329,7 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  padding: 1rem;
 }
 
 .welcome-hero {
@@ -640,6 +658,7 @@
   gap: 1.5rem;
   max-width: 100%;
   width: 100%;
+  padding: 0 1rem;
 }
 
 .suggestion-card {
@@ -738,6 +757,7 @@
   min-height: 0;
   width: 100%;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 .chat-container::-webkit-scrollbar {
@@ -778,6 +798,8 @@
   animation: messageSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   box-sizing: border-box;
   margin-bottom: 1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .message.user {
@@ -846,6 +868,9 @@
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 [data-theme="light"] .message-content {
@@ -877,6 +902,9 @@
   line-height: 1.6;
   font-size: 0.95rem;
   font-weight: 400;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 [data-theme="light"] .message-text {
@@ -995,6 +1023,7 @@
   flex-shrink: 0;
   width: 100%;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 .input-container {
@@ -1002,6 +1031,7 @@
   width: 100%;
   margin: 0 auto;
   position: relative;
+  box-sizing: border-box;
 }
 
 .image-preview {
@@ -1073,6 +1103,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   width: 100%;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 [data-theme="light"] .input-wrapper {
@@ -1115,6 +1146,9 @@
   font-family: 'Outfit', sans-serif;
   padding: 0.25rem 0;
   width: 100%;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .message-input:disabled {
@@ -1497,13 +1531,20 @@
     flex-shrink: 0;
   }
   
+  .main {
+    width: 100%;
+    max-width: 100%;
+  }
+  
   .welcome-screen {
     padding: 1rem;
+    min-height: calc(100vh - 140px);
   }
   
   .first-visit-welcome {
     padding: 0.75rem;
     max-width: 100%;
+    width: 100%;
   }
   
   .welcome-hero {
@@ -1553,6 +1594,7 @@
     padding: 1rem;
     flex-wrap: nowrap;
     gap: 0.5rem;
+    min-height: 60px;
   }
   
   .nav-left {
@@ -1567,7 +1609,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 120px;
+    min-width: 80px;
   }
   
   .user-profile {
@@ -1589,9 +1632,10 @@
     gap: 0.25rem;
     flex-wrap: nowrap;
     overflow: hidden;
+    max-width: 200px;
   }
   
-  .header-actions .header-btn:nth-child(n+5) {
+  .header-actions .header-btn:nth-child(n+4) {
     display: none;
   }
   
@@ -1660,11 +1704,14 @@
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 0.5rem;
+    max-width: 100%;
   }
   
   .suggestion-card {
     padding: 1.25rem;
     border-radius: 16px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .suggestion-card p {
@@ -1675,16 +1722,19 @@
   .chat-container {
     padding: 0.75rem;
     gap: 1rem;
+    max-width: 100%;
   }
   
   .message {
     gap: 0.75rem;
     margin-bottom: 0.75rem;
+    max-width: 100%;
   }
   
   .message-avatar {
     width: 36px;
     height: 36px;
+    flex-shrink: 0;
   }
   
   .message-avatar svg {
@@ -1695,43 +1745,52 @@
   .message-content {
     padding: 1rem;
     border-radius: 12px;
+    min-width: 0;
+    max-width: calc(100% - 52px);
   }
   
   .message-text {
     font-size: 0.9rem;
     line-height: 1.5;
+    word-break: break-word;
   }
   
   .message-images {
     gap: 0.75rem;
     margin-bottom: 0.75rem;
+    flex-wrap: wrap;
   }
   
   .message-image {
     width: 140px;
     height: 105px;
     border-radius: 10px;
+    flex-shrink: 0;
   }
   
   .input-area {
     padding: 1rem;
+    max-width: 100%;
   }
   
   .input-wrapper {
     padding: 1rem;
     border-radius: 16px;
     gap: 0.75rem;
+    max-width: 100%;
   }
   
   .message-input {
     font-size: 1rem;
     line-height: 1.5;
+    min-width: 0;
   }
   
   .action-btn {
     width: 44px;
     height: 44px;
     border-radius: 12px;
+    flex-shrink: 0;
   }
   
   .action-btn svg {
@@ -1752,6 +1811,7 @@
   .image-preview {
     gap: 0.75rem;
     margin-bottom: 0.75rem;
+    flex-wrap: wrap;
   }
   
   .image-preview-item img {
@@ -1770,12 +1830,20 @@
 }
 
 @media (max-width: 480px) {
+  .main {
+    width: 100%;
+    max-width: 100vw;
+  }
+  
   .welcome-screen {
     padding: 0.75rem;
+    min-height: calc(100vh - 120px);
   }
   
   .first-visit-welcome {
     padding: 0.5rem;
+    width: 100%;
+    max-width: 100%;
   }
   
   .welcome-hero {
@@ -1822,6 +1890,7 @@
   .nav {
     padding: 0.875rem;
     gap: 0.25rem;
+    min-height: 56px;
   }
   
   .nav-left {
@@ -1830,14 +1899,16 @@
   
   .logo {
     font-size: 1rem;
-    max-width: 120px;
+    max-width: 100px;
+    min-width: 60px;
   }
   
   .header-actions {
     gap: 0.125rem;
+    max-width: 150px;
   }
   
-  .header-actions .header-btn:nth-child(n+4) {
+  .header-actions .header-btn:nth-child(n+3) {
     display: none;
   }
   
@@ -1887,6 +1958,8 @@
   .suggestion-card {
     padding: 1rem;
     border-radius: 14px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .suggestion-card p {
@@ -1895,11 +1968,13 @@
   
   .chat-container {
     padding: 0.5rem;
+    max-width: 100vw;
   }
   
   .message-content {
     padding: 0.75rem;
     border-radius: 10px;
+    max-width: calc(100% - 48px);
   }
   
   .message-text {
@@ -1911,6 +1986,8 @@
     gap: 0.5rem;
     padding: 0.75rem;
     border-radius: 14px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .action-btn {
@@ -1926,6 +2003,8 @@
   
   .message-input {
     font-size: 0.9rem;
+    min-width: 0;
+    width: 100%;
   }
   
   .image-preview-item img {
@@ -1936,6 +2015,10 @@
 
 /* Tablet styles */
 @media (min-width: 769px) and (max-width: 1199px) {
+  .main {
+    max-width: 100%;
+  }
+  
   .welcome-screen {
     padding: 2.5rem;
   }
@@ -2099,6 +2182,7 @@
   
   .user-name {
     font-size: 1rem;
+    display: block;
   }
   
   .header-actions {
